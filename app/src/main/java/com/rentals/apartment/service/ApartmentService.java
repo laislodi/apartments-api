@@ -1,15 +1,15 @@
 package com.rentals.apartment.service;
 
 import com.google.common.collect.Lists;
+import com.rentals.apartment.service.filter.ApartmentFilter;
 import com.rentals.apartment.domain.ApartmentBean;
 import com.rentals.apartment.domain.ApartmentRecord;
 import com.rentals.apartment.repositories.ApartmentRepository;
+import com.rentals.apartment.service.filter.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 
 @Service
 public class ApartmentService {
@@ -20,11 +20,47 @@ public class ApartmentService {
         this.apartmentRepository = apartmentRepository;
     }
 
-    public List<ApartmentRecord> getAllApartments() {
+    private MinimumFilter setMinimumFilter(String minimum) {
+        if (minimum == null) {
+            return new MinimumFilter(0, true);
+        }
+        boolean greaterThan = false;
+        int min = 0;
+        if (minimum.contains("+")) {
+            greaterThan = true;
+        }
+        minimum = minimum.replaceAll("\\+", "");
+        min = Integer.parseInt(minimum);
+        return new MinimumFilter(min, greaterThan);
+    }
+
+    private RangeFilter setRangeFilter(String minimum, String maximum) {
+        if (Objects.isNull(minimum)) {
+            minimum = "0";
+        }
+        if (Objects.isNull(maximum)) {
+            maximum = "999999";
+        }
+        Double min = Double.valueOf(minimum);
+        Double max = Double.valueOf(maximum);
+        return new RangeFilter(min, max);
+    }
+
+    public List<ApartmentRecord> getAllApartments(String orderBy, String bedroom, String bathroom, String minArea, String maxArea, boolean hasParking, String minPrice, String maxPrice, String description) {
+        ApartmentFilter filter = new ApartmentFilter(
+                setMinimumFilter(bedroom),
+                setMinimumFilter(bathroom),
+                setRangeFilter(minArea, maxArea),
+                hasParking,
+                setRangeFilter(minPrice, maxPrice),
+                description);
+
+        FilterExecutor executor = new FilterExecutor();
         List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
+        List<ApartmentBean> filteredApartments = executor.filter(allBeans, filter);
         List<ApartmentRecord> allRecords = new ArrayList<>();
         for (ApartmentBean bean:
-             allBeans) {
+                filteredApartments) {
             allRecords.add(bean.toRecord());
         }
         return allRecords;
