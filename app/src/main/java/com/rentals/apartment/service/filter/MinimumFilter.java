@@ -2,13 +2,10 @@ package com.rentals.apartment.service.filter;
 
 import java.util.Objects;
 
-public class MinimumFilter {
-    private Integer minimum;
-    private boolean greaterThan;
-
-    public MinimumFilter() {
-    }
-
+public record MinimumFilter(
+        Integer minimum,
+        boolean greaterThan
+) {
     public MinimumFilter(Integer minimum, boolean greaterThan) {
         this.minimum = minimum;
         this.greaterThan = greaterThan;
@@ -18,16 +15,8 @@ public class MinimumFilter {
         return minimum;
     }
 
-    public void setMinimum(Integer minimum) {
-        this.minimum = minimum;
-    }
-
     public boolean isGreaterThan() {
         return greaterThan;
-    }
-
-    public void setGreaterThan(boolean greaterThan) {
-        this.greaterThan = greaterThan;
     }
 
     @Override

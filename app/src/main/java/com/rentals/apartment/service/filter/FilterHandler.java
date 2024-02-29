@@ -5,11 +5,8 @@ import com.rentals.apartment.domain.ApartmentBean;
 import java.util.List;
 
 public interface FilterHandler {
-    FilterHandler setNextHandler(FilterHandler next);
 
-    FilterHandler getNext();
+    boolean shouldFilter(ApartmentFilterParam filter);
 
-    boolean shouldFilter(ApartmentFilter filter);
-
-     List<ApartmentBean> applyFilter(List<ApartmentBean> apartmentBeans, ApartmentFilter filter);
+     List<ApartmentBean> applyFilter(List<ApartmentBean> apartmentBeans, ApartmentFilterParam filter);
 }

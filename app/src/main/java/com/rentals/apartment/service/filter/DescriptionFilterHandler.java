@@ -7,39 +7,18 @@ import java.util.Objects;
 
 public class DescriptionFilterHandler implements StringFilterHandler {
 
-    public FilterHandler next;
-
-    public DescriptionFilterHandler(FilterHandler next) {
-        this.next = next;
-    }
-
     public DescriptionFilterHandler() {
         super();
     }
 
     @Override
-    public FilterHandler setNextHandler(FilterHandler next) {
-        this.next = next;
-        return next;
-    }
-
-    @Override
-    public FilterHandler getNext() {
-        return next;
-    }
-
-    @Override
-    public boolean shouldFilter(ApartmentFilter filter) {
+    public boolean shouldFilter(ApartmentFilterParam filter) {
         return Objects.nonNull(filter) && Objects.nonNull(filter.getDescription());
     }
 
     @Override
-    public List<ApartmentBean> applyFilter(List<ApartmentBean> apartmentBeans, ApartmentFilter filter) {
-        List<ApartmentBean> list = applyStringFilter(apartmentBeans, filter.getDescription());
-        if (Objects.isNull(next)) {
-            return list;
-        }
-        return next.applyFilter(list, filter);
+    public List<ApartmentBean> applyFilter(List<ApartmentBean> apartmentBeans, ApartmentFilterParam filter) {
+        return applyStringFilter(apartmentBeans, filter.getDescription());
     }
 
     @Override

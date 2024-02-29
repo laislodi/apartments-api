@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RangeFilterHandler extends FilterHandler {
 
-    List<ApartmentBean> applyRangeFilter(List<ApartmentBean> apartmentBeans, ApartmentFilter filter);
+    List<ApartmentBean> applyRangeFilter(List<ApartmentBean> apartmentBeans, ApartmentFilterParam filter);
 }

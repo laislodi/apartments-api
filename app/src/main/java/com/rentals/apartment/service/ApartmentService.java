@@ -1,7 +1,7 @@
 package com.rentals.apartment.service;
 
 import com.google.common.collect.Lists;
-import com.rentals.apartment.service.filter.ApartmentFilter;
+import com.rentals.apartment.service.filter.ApartmentFilterParam;
 import com.rentals.apartment.domain.ApartmentBean;
 import com.rentals.apartment.domain.ApartmentRecord;
 import com.rentals.apartment.repositories.ApartmentRepository;
@@ -47,17 +47,25 @@ public class ApartmentService {
     }
 
     public List<ApartmentRecord> getAllApartments(String orderBy, String bedroom, String bathroom, String minArea, String maxArea, boolean hasParking, String minPrice, String maxPrice, String description) {
-        ApartmentFilter filter = new ApartmentFilter(
+        ApartmentFilterParam filter = new ApartmentFilterParam(
                 setMinimumFilter(bedroom),
                 setMinimumFilter(bathroom),
                 setRangeFilter(minArea, maxArea),
                 hasParking,
                 setRangeFilter(minPrice, maxPrice),
                 description);
+        List<FilterHandler> filterHandlers = Arrays.asList(
+                new AreaFilterHandler(),
+                new BathroomFilterHandler(),
+                new BedroomFilterHandler(),
+                new HasParkingHandler(),
+                new PriceFilterHandler(),
+                new DescriptionFilterHandler()
+        );
 
         FilterExecutor executor = new FilterExecutor();
         List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
-        List<ApartmentBean> filteredApartments = executor.filter(allBeans, filter);
+        List<ApartmentBean> filteredApartments = executor.filter(allBeans, filterHandlers, filter);
         List<ApartmentRecord> allRecords = new ArrayList<>();
         for (ApartmentBean bean:
                 filteredApartments) {

@@ -2,13 +2,10 @@ package com.rentals.apartment.service.filter;
 
 import java.util.Objects;
 
-public class RangeFilter {
-    private Double minimum;
-    private Double maximum;
-
-    public RangeFilter() {
-    }
-
+public record RangeFilter(
+        Double minimum,
+        Double maximum
+) {
     public RangeFilter(Double minimum, Double maximum) {
         this.minimum = minimum;
         this.maximum = maximum;
@@ -18,16 +15,8 @@ public class RangeFilter {
         return minimum;
     }
 
-    public void setMinimum(Double minimum) {
-        this.minimum = minimum;
-    }
-
     public Double getMaximum() {
         return maximum;
-    }
-
-    public void setMaximum(Double maximum) {
-        this.maximum = maximum;
     }
 
     @Override
