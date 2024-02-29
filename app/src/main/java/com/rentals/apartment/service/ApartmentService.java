@@ -21,7 +21,56 @@ public class ApartmentService {
     }
 
     public List<ApartmentRecord> getAllApartments() {
+    private MinimumFilter setMinimumFilter(String minimum) {
+        if (minimum == null) {
+            return new MinimumFilter(0, true);
+        }
+        boolean greaterThan = false;
+        int min = 0;
+        if (minimum.contains("+")) {
+            greaterThan = true;
+        }
+        minimum = minimum.replaceAll("\\+", "");
+        min = Integer.parseInt(minimum);
+        return new MinimumFilter(min, greaterThan);
+    }
+
+    private RangeFilter setRangeFilter(String minimum, String maximum) {
+        if (Objects.isNull(minimum)) {
+            minimum = "0";
+        }
+        if (Objects.isNull(maximum)) {
+            maximum = "999999";
+        }
+        Double min = Double.valueOf(minimum);
+        Double max = Double.valueOf(maximum);
+        return new RangeFilter(min, max);
+    }
+
+    private boolean minimumFilter(int apartmentMinimum, String minimumStr) {
+        if (Objects.isNull(minimumStr)) {
+            return apartmentMinimum >= 0;
+        }
+        boolean greaterThan = minimumStr.contains("+");
+        int filterMinimum = Integer.parseInt(minimumStr.replaceAll("\\+", ""));
+        return greaterThan ? apartmentMinimum >= filterMinimum : apartmentMinimum == filterMinimum;
+    }
+
+    private boolean rangeFilter(double apartmentMin, String minStr, String maxStr) {
+        boolean isBiggerThanMinimum = !Objects.nonNull(minStr) || apartmentMin >= Double.parseDouble(minStr);
+        boolean isSmallerThanMaximum = !Objects.nonNull(maxStr) || apartmentMin <= Double.parseDouble(maxStr);
+        return isBiggerThanMinimum && isSmallerThanMaximum;
+    }
+
+    public List<ApartmentRecord> getAllApartments(String orderBy, String bedroom, String bathroom, String minArea, String maxArea, boolean hasParking, String minPrice, String maxPrice, String description) {
         List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
+        List<ApartmentBean> filteredApartments = allBeans.stream()
+                .filter(ap -> minimumFilter(ap.getNumberOfBedrooms(), bedroom))
+                .filter(ap -> minimumFilter(ap.getNumberOfBathrooms(), bathroom))
+                .filter(ap -> rangeFilter(ap.getArea(), minArea, maxArea))
+                .filter(ap -> hasParking ? ap.getHasParking() : true)
+                .filter(ap -> rangeFilter(ap.getPrice(), minPrice, maxPrice))
+                .toList();
         List<ApartmentRecord> allRecords = new ArrayList<>();
         for (ApartmentBean bean:
              allBeans) {
