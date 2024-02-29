@@ -6,10 +6,7 @@ import com.rentals.apartment.domain.ApartmentRecord;
 import com.rentals.apartment.repositories.ApartmentRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ApartmentService {
@@ -18,33 +15,6 @@ public class ApartmentService {
 
     public ApartmentService(ApartmentRepository apartmentRepository) {
         this.apartmentRepository = apartmentRepository;
-    }
-
-    public List<ApartmentRecord> getAllApartments() {
-    private MinimumFilter setMinimumFilter(String minimum) {
-        if (minimum == null) {
-            return new MinimumFilter(0, true);
-        }
-        boolean greaterThan = false;
-        int min = 0;
-        if (minimum.contains("+")) {
-            greaterThan = true;
-        }
-        minimum = minimum.replaceAll("\\+", "");
-        min = Integer.parseInt(minimum);
-        return new MinimumFilter(min, greaterThan);
-    }
-
-    private RangeFilter setRangeFilter(String minimum, String maximum) {
-        if (Objects.isNull(minimum)) {
-            minimum = "0";
-        }
-        if (Objects.isNull(maximum)) {
-            maximum = "999999";
-        }
-        Double min = Double.valueOf(minimum);
-        Double max = Double.valueOf(maximum);
-        return new RangeFilter(min, max);
     }
 
     private boolean minimumFilter(int apartmentMinimum, String minimumStr) {
@@ -63,7 +33,7 @@ public class ApartmentService {
     }
 
     public List<ApartmentRecord> getAllApartments(String orderBy, String bedroom, String bathroom, String minArea, String maxArea, boolean hasParking, String minPrice, String maxPrice, String description) {
-        List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
+    List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
         List<ApartmentBean> filteredApartments = allBeans.stream()
                 .filter(ap -> minimumFilter(ap.getNumberOfBedrooms(), bedroom))
                 .filter(ap -> minimumFilter(ap.getNumberOfBathrooms(), bathroom))
@@ -73,7 +43,7 @@ public class ApartmentService {
                 .toList();
         List<ApartmentRecord> allRecords = new ArrayList<>();
         for (ApartmentBean bean:
-             allBeans) {
+                filteredApartments) {
             allRecords.add(bean.toRecord());
         }
         return allRecords;

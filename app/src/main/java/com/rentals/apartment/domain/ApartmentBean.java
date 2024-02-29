@@ -3,11 +3,9 @@ package com.rentals.apartment.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
-@Getter
-@EqualsAndHashCode
+import java.util.Objects;
+
 @Entity
 @Table(name = "apartments")
 public class ApartmentBean {
@@ -75,6 +73,19 @@ public class ApartmentBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ApartmentBean bean = (ApartmentBean) o;
+        return Objects.equals(id, bean.id) && Objects.equals(numberOfBedrooms, bean.numberOfBedrooms) && Objects.equals(numberOfBathrooms, bean.numberOfBathrooms) && Objects.equals(area, bean.area) && Objects.equals(hasParking, bean.hasParking) && Objects.equals(price, bean.price) && Objects.equals(description, bean.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 
     public ApartmentRecord toRecord() {

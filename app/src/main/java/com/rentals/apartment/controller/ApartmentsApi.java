@@ -19,8 +19,18 @@ public class ApartmentsApi {
     }
 
     @GetMapping("/apartments")
-    public List<ApartmentRecord> getAllApartments() {
-        return apartmentService.getAllApartments();
+    public List<ApartmentRecord> getAllApartments(
+            @RequestParam(required = false) String bedrooms,
+            @RequestParam(required = false) String bathrooms,
+            @RequestParam(required = false) String minArea,
+            @RequestParam(required = false) String maxArea,
+            @RequestParam(required = false) boolean hasParking,
+            @RequestParam(required = false) String minPrice,
+            @RequestParam(required = false) String maxPrice,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false, defaultValue = "ASC") String order
+    ) {
+        return apartmentService.getAllApartments(order, bedrooms, bathrooms, minArea, maxArea, hasParking, minPrice, maxPrice, description);
     }
 
     @GetMapping("/apartments/{id}")
