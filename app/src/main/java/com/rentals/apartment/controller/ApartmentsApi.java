@@ -6,6 +6,8 @@ import com.rentals.apartment.service.ApartmentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -20,17 +22,10 @@ public class ApartmentsApi {
 
     @GetMapping("/apartments")
     public List<ApartmentRecord> getAllApartments(
-            @RequestParam(required = false) String bedrooms,
-            @RequestParam(required = false) String bathrooms,
-            @RequestParam(required = false) String minArea,
-            @RequestParam(required = false) String maxArea,
-            @RequestParam(required = false) boolean hasParking,
-            @RequestParam(required = false) String minPrice,
-            @RequestParam(required = false) String maxPrice,
-            @RequestParam(required = false) String description,
+            @RequestParam Map<String, String> filter,
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
-        return apartmentService.getAllApartments(order, bedrooms, bathrooms, minArea, maxArea, hasParking, minPrice, maxPrice, description);
+        return apartmentService.getAllApartments(order, filter);
     }
 
     @GetMapping("/apartments/{id}")

@@ -32,14 +32,19 @@ public class ApartmentService {
         return isBiggerThanMinimum && isSmallerThanMaximum;
     }
 
-    public List<ApartmentRecord> getAllApartments(String orderBy, String bedroom, String bathroom, String minArea, String maxArea, boolean hasParking, String minPrice, String maxPrice, String description) {
-    List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
+    private boolean booleanFilter(String bool) {
+        return bool.equals("true");
+    }
+
+    public List<ApartmentRecord> getAllApartments(String orderBy, Map<String, String> filter) {
+        List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
         List<ApartmentBean> filteredApartments = allBeans.stream()
-                .filter(ap -> minimumFilter(ap.getNumberOfBedrooms(), bedroom))
-                .filter(ap -> minimumFilter(ap.getNumberOfBathrooms(), bathroom))
-                .filter(ap -> rangeFilter(ap.getArea(), minArea, maxArea))
-                .filter(ap -> hasParking ? ap.getHasParking() : true)
-                .filter(ap -> rangeFilter(ap.getPrice(), minPrice, maxPrice))
+                .filter(ap -> ap.getDescription().toLowerCase().contains(filter.get("description").toLowerCase()))
+                .filter(ap -> minimumFilter(ap.getNumberOfBedrooms(), filter.get("bedrooms")))
+                .filter(ap -> minimumFilter(ap.getNumberOfBathrooms(), filter.get("bathrooms")))
+                .filter(ap -> rangeFilter(ap.getArea(), filter.get("minArea"), filter.get("maxArea")))
+                .filter(ap -> booleanFilter(filter.get("hasParking")) ? ap.getHasParking() : true)
+                .filter(ap -> rangeFilter(ap.getPrice(), filter.get("minPrice"), filter.get("maxPrice")))
                 .toList();
         List<ApartmentRecord> allRecords = new ArrayList<>();
         for (ApartmentBean bean:
