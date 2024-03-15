@@ -4,16 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "apartments")
-public class ApartmentBean {
+public class ApartmentEntity {
     @Id
     private String id;
     private Integer numberOfBedrooms;
     private Integer numberOfBathrooms;
-    private Double area;
+    private Float area;
     private Boolean hasParking;
     private Float price;
     private String description;
@@ -43,11 +45,11 @@ public class ApartmentBean {
         this.numberOfBathrooms = numberOfBathrooms;
     }
 
-    public Double getArea() {
+    public Float getArea() {
         return area;
     }
 
-    public void setArea(Double area) {
+    public void setArea(Float area) {
         this.area = area;
     }
 
@@ -79,8 +81,14 @@ public class ApartmentBean {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ApartmentBean bean = (ApartmentBean) o;
-        return Objects.equals(id, bean.id) && Objects.equals(numberOfBedrooms, bean.numberOfBedrooms) && Objects.equals(numberOfBathrooms, bean.numberOfBathrooms) && Objects.equals(area, bean.area) && Objects.equals(hasParking, bean.hasParking) && Objects.equals(price, bean.price) && Objects.equals(description, bean.description);
+        ApartmentEntity entity = (ApartmentEntity) o;
+        return Objects.equals(id, entity.id) &&
+                Objects.equals(numberOfBedrooms, entity.numberOfBedrooms) &&
+                Objects.equals(numberOfBathrooms, entity.numberOfBathrooms) &&
+                Objects.equals(area, entity.area) &&
+                Objects.equals(hasParking, entity.hasParking) &&
+                Objects.equals(price, entity.price) &&
+                Objects.equals(description, entity.description);
     }
 
     @Override
@@ -88,7 +96,17 @@ public class ApartmentBean {
         return Objects.hash(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 
-    public ApartmentRecord toRecord() {
-        return new ApartmentRecord(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
+    public ApartmentDTO toRecord() {
+        return new ApartmentDTO(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
+    }
+
+    public static List<ApartmentDTO> toRecord(List<ApartmentEntity> entities) {
+        List<ApartmentDTO> records = new ArrayList<>();
+        entities.forEach(entity -> records.add(
+                new ApartmentDTO(
+                        entity.id, entity.numberOfBedrooms, entity.numberOfBathrooms, entity.area, entity.hasParking, entity.price, entity.description)
+                )
+        );
+        return records;
     }
 }

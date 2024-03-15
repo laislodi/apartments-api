@@ -1,10 +1,10 @@
 package com.rentals.apartment.domain;
 
-public record ApartmentRecord(
+public record ApartmentDTO(
         String id,
         Integer numberOfBedrooms,
         Integer numberOfBathrooms,
-        Double area,
+        Float area,
         Boolean hasParking,
         Float price,
         String description
@@ -16,15 +16,15 @@ public record ApartmentRecord(
                 """, id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 
-//    public ApartmentBean toBean() {
-//        ApartmentBean bean = new ApartmentBean();
-//        bean.setId(id);
-//        bean.setNumberOfBedrooms(numberOfBedrooms);
-//        bean.setNumberOfBathrooms(numberOfBathrooms);
-//        bean.setArea(area);
-//        bean.setHasParking(hasParking);
-//        bean.setPrice(price);
-//        bean.setDescription(description);
-//        return bean;
-//    }
+    public ApartmentEntity toEntity() {
+        ApartmentEntity bean = new ApartmentEntity();
+        bean.setId(id);
+        bean.setNumberOfBedrooms(numberOfBedrooms);
+        bean.setNumberOfBathrooms(numberOfBathrooms);
+        bean.setArea(area);
+        bean.setHasParking(hasParking);
+        bean.setPrice(price);
+        bean.setDescription(description);
+        return bean;
+    }
 }

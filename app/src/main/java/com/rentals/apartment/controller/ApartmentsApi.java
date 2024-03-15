@@ -1,13 +1,12 @@
 package com.rentals.apartment.controller;
 
-import com.rentals.apartment.domain.ApartmentBean;
-import com.rentals.apartment.domain.ApartmentRecord;
+import com.rentals.apartment.domain.ApartmentEntity;
+import com.rentals.apartment.domain.ApartmentFilter;
+import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.service.ApartmentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -21,25 +20,25 @@ public class ApartmentsApi {
     }
 
     @GetMapping("/apartments")
-    public List<ApartmentRecord> getAllApartments(
-            @RequestParam Map<String, String> filter,
+    public List<ApartmentDTO> getAllApartments(
+            ApartmentFilter filter,
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
         return apartmentService.getAllApartments(order, filter);
     }
 
     @GetMapping("/apartments/{id}")
-    public ApartmentRecord getApartment(@PathVariable String id) throws Exception {
+    public ApartmentDTO getApartment(@PathVariable String id) throws Exception {
         return apartmentService.getApartmentById(id);
     }
 
     @PostMapping("/apartments/new")
-    public ApartmentRecord createApartment(@RequestBody ApartmentBean newApartment) {
+    public ApartmentDTO createApartment(@RequestBody ApartmentEntity newApartment) {
         return apartmentService.createApartment(newApartment);
     }
 
     @PutMapping("/apartments/{id}")
-    public ApartmentBean editApartment(@PathVariable String id, @RequestBody ApartmentBean apartment) {
+    public ApartmentEntity editApartment(@PathVariable String id, @RequestBody ApartmentEntity apartment) {
         return apartmentService.editApartment(id, apartment);
     }
 }
