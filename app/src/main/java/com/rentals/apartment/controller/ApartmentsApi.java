@@ -1,7 +1,8 @@
 package com.rentals.apartment.controller;
 
-import com.rentals.apartment.domain.ApartmentBean;
-import com.rentals.apartment.domain.ApartmentRecord;
+import com.rentals.apartment.domain.ApartmentEntity;
+import com.rentals.apartment.domain.ApartmentFilter;
+import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.service.ApartmentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,32 +20,25 @@ public class ApartmentsApi {
     }
 
     @GetMapping("/apartments")
-    public List<ApartmentRecord> getAllApartments(
-            @RequestParam(required = false) String bedrooms,
-            @RequestParam(required = false) String bathrooms,
-            @RequestParam(required = false) String minArea,
-            @RequestParam(required = false) String maxArea,
-            @RequestParam(required = false) boolean hasParking,
-            @RequestParam(required = false) String minPrice,
-            @RequestParam(required = false) String maxPrice,
-            @RequestParam(required = false) String description,
+    public List<ApartmentDTO> getAllApartments(
+            ApartmentFilter filter,
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
-        return apartmentService.getAllApartments(order, bedrooms, bathrooms, minArea, maxArea, hasParking, minPrice, maxPrice, description);
+        return apartmentService.getAllApartments(order, filter);
     }
 
     @GetMapping("/apartments/{id}")
-    public ApartmentRecord getApartment(@PathVariable String id) throws Exception {
+    public ApartmentDTO getApartment(@PathVariable String id) throws Exception {
         return apartmentService.getApartmentById(id);
     }
 
     @PostMapping("/apartments/new")
-    public ApartmentRecord createApartment(@RequestBody ApartmentBean newApartment) {
+    public ApartmentDTO createApartment(@RequestBody ApartmentEntity newApartment) {
         return apartmentService.createApartment(newApartment);
     }
 
     @PutMapping("/apartments/{id}")
-    public ApartmentBean editApartment(@PathVariable String id, @RequestBody ApartmentBean apartment) {
+    public ApartmentEntity editApartment(@PathVariable String id, @RequestBody ApartmentEntity apartment) {
         return apartmentService.editApartment(id, apartment);
     }
 }
