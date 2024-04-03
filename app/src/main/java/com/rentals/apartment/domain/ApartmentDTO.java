@@ -1,6 +1,6 @@
 package com.rentals.apartment.domain;
 
-public record ApartmentRecord(
+public record ApartmentDTO(
         String id,
         Integer numberOfBedrooms,
         Integer numberOfBathrooms,

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "apartments")
-public class ApartmentBean {
+public class ApartmentEntity {
     @Id
     private String id;
     private Integer numberOfBedrooms;
@@ -79,7 +79,7 @@ public class ApartmentBean {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ApartmentBean bean = (ApartmentBean) o;
+        ApartmentEntity bean = (ApartmentEntity) o;
         return Objects.equals(id, bean.id) && Objects.equals(numberOfBedrooms, bean.numberOfBedrooms) && Objects.equals(numberOfBathrooms, bean.numberOfBathrooms) && Objects.equals(area, bean.area) && Objects.equals(hasParking, bean.hasParking) && Objects.equals(price, bean.price) && Objects.equals(description, bean.description);
     }
 
@@ -88,7 +88,7 @@ public class ApartmentBean {
         return Objects.hash(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 
-    public ApartmentRecord toRecord() {
-        return new ApartmentRecord(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
+    public ApartmentDTO toRecord() {
+        return new ApartmentDTO(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 }

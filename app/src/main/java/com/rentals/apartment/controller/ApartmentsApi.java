@@ -1,8 +1,10 @@
 package com.rentals.apartment.controller;
 
-import com.rentals.apartment.domain.ApartmentBean;
-import com.rentals.apartment.domain.ApartmentRecord;
+import com.rentals.apartment.domain.ApartmentEntity;
+import com.rentals.apartment.domain.ApartmentFilter;
+import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.service.ApartmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,32 +21,34 @@ public class ApartmentsApi {
     }
 
     @GetMapping("/apartments")
-    public List<ApartmentRecord> getAllApartments(
-            @RequestParam(required = false) String bedrooms,
-            @RequestParam(required = false) String bathrooms,
-            @RequestParam(required = false) String minArea,
-            @RequestParam(required = false) String maxArea,
-            @RequestParam(required = false) boolean hasParking,
-            @RequestParam(required = false) String minPrice,
-            @RequestParam(required = false) String maxPrice,
-            @RequestParam(required = false) String description,
+    public ResponseEntity<List<ApartmentDTO>> getAllApartmentsWithSpecifications(
+            ApartmentFilter filter,
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
-        return apartmentService.getAllApartments(order, bedrooms, bathrooms, minArea, maxArea, hasParking, minPrice, maxPrice, description);
+        // TODO: adjust ResponseEntity to return the right codes
+        return ResponseEntity.ok(apartmentService.getAllApartmentsWithSpecifications(order, filter));
+    }
+
+    @GetMapping("/apartments-old")
+    public ResponseEntity<List<ApartmentDTO>> getAllApartments(
+            ApartmentFilter filter,
+            @RequestParam(required = false, defaultValue = "ASC") String order
+    ) {
+        return ResponseEntity.ok(apartmentService.getAllApartmentsWithCustom(order, filter));
     }
 
     @GetMapping("/apartments/{id}")
-    public ApartmentRecord getApartment(@PathVariable String id) throws Exception {
-        return apartmentService.getApartmentById(id);
+    public ResponseEntity<ApartmentDTO> getApartment(@PathVariable String id) throws Exception {
+        return ResponseEntity.ok(apartmentService.getApartmentById(id));
     }
 
     @PostMapping("/apartments/new")
-    public ApartmentRecord createApartment(@RequestBody ApartmentBean newApartment) {
-        return apartmentService.createApartment(newApartment);
+    public ResponseEntity<ApartmentDTO> createApartment(@RequestBody ApartmentEntity newApartment) {
+        return ResponseEntity.ok(apartmentService.createApartment(newApartment));
     }
 
     @PutMapping("/apartments/{id}")
-    public ApartmentBean editApartment(@PathVariable String id, @RequestBody ApartmentBean apartment) {
-        return apartmentService.editApartment(id, apartment);
+    public ResponseEntity<ApartmentEntity> editApartment(@PathVariable String id, @RequestBody ApartmentEntity apartment) {
+        return ResponseEntity.ok(apartmentService.editApartment(id, apartment));
     }
 }

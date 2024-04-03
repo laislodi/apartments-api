@@ -1,72 +1,78 @@
 package com.rentals.apartment.service;
 
-import com.google.common.collect.Lists;
-import com.rentals.apartment.domain.ApartmentBean;
-import com.rentals.apartment.domain.ApartmentRecord;
+import com.rentals.apartment.domain.ApartmentEntity;
+import com.rentals.apartment.domain.ApartmentFilter;
+import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.repositories.ApartmentRepository;
+import com.rentals.apartment.repositories.ApartmentRepositoryCustom;
+import com.rentals.apartment.repositories.ApartmentSpecifications;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class ApartmentService {
 
     private final ApartmentRepository apartmentRepository;
+    private final ApartmentRepositoryCustom apartmentRepositoryCustom;
+    private final ApartmentSpecifications specifications;
 
-    public ApartmentService(ApartmentRepository apartmentRepository) {
+    public ApartmentService(ApartmentRepositoryCustom apartmentRepositoryCustom, ApartmentRepository apartmentRepository, ApartmentSpecifications specifications) {
         this.apartmentRepository = apartmentRepository;
+        this.apartmentRepositoryCustom = apartmentRepositoryCustom;
+        this.specifications = specifications;
     }
 
-    private boolean minimumFilter(int apartmentMinimum, String minimumStr) {
-        if (Objects.isNull(minimumStr)) {
-            return apartmentMinimum >= 0;
-        }
-        boolean greaterThan = minimumStr.contains("+");
-        int filterMinimum = Integer.parseInt(minimumStr.replaceAll("\\+", ""));
-        return greaterThan ? apartmentMinimum >= filterMinimum : apartmentMinimum == filterMinimum;
-    }
-
-    private boolean rangeFilter(double apartmentMin, String minStr, String maxStr) {
-        boolean isBiggerThanMinimum = !Objects.nonNull(minStr) || apartmentMin >= Double.parseDouble(minStr);
-        boolean isSmallerThanMaximum = !Objects.nonNull(maxStr) || apartmentMin <= Double.parseDouble(maxStr);
-        return isBiggerThanMinimum && isSmallerThanMaximum;
-    }
-
-    public List<ApartmentRecord> getAllApartments(String orderBy, String bedroom, String bathroom, String minArea, String maxArea, boolean hasParking, String minPrice, String maxPrice, String description) {
-    List<ApartmentBean> allBeans = Lists.newArrayList(apartmentRepository.findAll());
-        List<ApartmentBean> filteredApartments = allBeans.stream()
-                .filter(ap -> minimumFilter(ap.getNumberOfBedrooms(), bedroom))
-                .filter(ap -> minimumFilter(ap.getNumberOfBathrooms(), bathroom))
-                .filter(ap -> rangeFilter(ap.getArea(), minArea, maxArea))
-                .filter(ap -> hasParking ? ap.getHasParking() : true)
-                .filter(ap -> rangeFilter(ap.getPrice(), minPrice, maxPrice))
-                .toList();
-        List<ApartmentRecord> allRecords = new ArrayList<>();
-        for (ApartmentBean bean:
-                filteredApartments) {
+    public List<ApartmentDTO> getAllApartmentsWithCustom(String orderBy, ApartmentFilter filter) {
+        List<ApartmentEntity> allApartments = apartmentRepositoryCustom.filter(filter);
+        List<ApartmentDTO> allRecords = new ArrayList<>();
+        for (ApartmentEntity bean:
+                allApartments) {
             allRecords.add(bean.toRecord());
         }
         return allRecords;
     }
 
-    public ApartmentRecord getApartmentById(String id) throws Exception {
-        Optional<ApartmentBean> apartment = apartmentRepository.findById(id);
+    public List<ApartmentDTO> getAllApartmentsWithSpecifications(String orderBy, ApartmentFilter filter) {
+        List<ApartmentEntity> allApartments;
+        allApartments = apartmentRepository.findAll(
+                where(specifications.descriptionContains(filter.description()))
+                        .and(specifications.areaBetween(filter.minArea(), filter.maxArea()))
+                        .and(specifications.priceBetween(filter.minPrice(), filter.maxPrice()))
+                        .and(specifications.hasParking(filter.hasParking()))
+                        .and(specifications.bedroomsEqualOrGreaterThan(filter.bedrooms()))
+                        .and(specifications.bathroomsEqualOrGreaterThan(filter.bathrooms()))
+                        );
+        // TODO: Use Mapstruct to convert entity to DTO
+        List<ApartmentDTO> allRecords = new ArrayList<>();
+        for (ApartmentEntity bean:
+                allApartments) {
+            allRecords.add(bean.toRecord());
+        }
+        return allRecords;
+    }
+
+
+    public ApartmentDTO getApartmentById(String id) throws Exception {
+        Optional<ApartmentEntity> apartment = apartmentRepository.findById(id);
         if (apartment.isEmpty()) {
             throw new Exception("Apartment not found: id: %s".formatted(id));
         }
         return apartment.get().toRecord();
     }
 
-    public ApartmentRecord createApartment(ApartmentBean apartment) {
+    public ApartmentDTO createApartment(ApartmentEntity apartment) {
         UUID uuid = UUID.randomUUID();
         apartment.setId(uuid.toString());
-        ApartmentBean newApartment = apartmentRepository.save(apartment);
+        ApartmentEntity newApartment = apartmentRepository.save(apartment);
         return newApartment.toRecord();
     }
 
-    public ApartmentBean editApartment(String id, ApartmentBean apartmentBean) {
-        ApartmentBean apartment = apartmentRepository.findById(id).get();
-        ApartmentBean newApartment = new ApartmentBean();
+    public ApartmentEntity editApartment(String id, ApartmentEntity apartmentEntity) {
+        ApartmentEntity apartment = apartmentRepository.findById(id).get();
+        ApartmentEntity newApartment = new ApartmentEntity();
         newApartment.setNumberOfBedrooms(apartment.getNumberOfBedrooms());
         newApartment.setNumberOfBathrooms(apartment.getNumberOfBathrooms());
         newApartment.setArea(apartment.getArea());
@@ -75,12 +81,12 @@ public class ApartmentService {
         newApartment.setDescription(apartment.getDescription());
 
         newApartment.setId(id);
-        newApartment.setNumberOfBedrooms(apartmentBean.getNumberOfBedrooms());
-        newApartment.setNumberOfBathrooms(apartmentBean.getNumberOfBathrooms());
-        newApartment.setArea(apartmentBean.getArea());
-        newApartment.setHasParking(apartmentBean.getHasParking());
-        newApartment.setPrice(apartmentBean.getPrice());
-        newApartment.setDescription(apartmentBean.getDescription());
+        newApartment.setNumberOfBedrooms(apartmentEntity.getNumberOfBedrooms());
+        newApartment.setNumberOfBathrooms(apartmentEntity.getNumberOfBathrooms());
+        newApartment.setArea(apartmentEntity.getArea());
+        newApartment.setHasParking(apartmentEntity.getHasParking());
+        newApartment.setPrice(apartmentEntity.getPrice());
+        newApartment.setDescription(apartmentEntity.getDescription());
 
        return apartmentRepository.save(newApartment);
     }
