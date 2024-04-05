@@ -1,4 +1,4 @@
-package com.rentals.apartment.repositories;
+package com.rentals.apartment.repositories.specifications;
 
 import com.rentals.apartment.domain.TokenEntity;
 import com.rentals.apartment.domain.UserEntity;

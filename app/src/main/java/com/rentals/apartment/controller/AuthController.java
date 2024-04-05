@@ -1,6 +1,7 @@
 package com.rentals.apartment.controller;
 
 import com.rentals.apartment.controller.params.TokenRequestBody;
+import com.rentals.apartment.domain.Role;
 import com.rentals.apartment.domain.TokenEntity;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.service.UserService;
@@ -24,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public TokenEntity register(@RequestBody UserEntity user) {
-        return userService.register(user.getUsername(), user.getPassword());
+        return userService.register(user.getUsername(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail());
     }
 
     @PostMapping("/logout")

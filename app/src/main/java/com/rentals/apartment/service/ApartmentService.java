@@ -5,7 +5,7 @@ import com.rentals.apartment.domain.ApartmentFilter;
 import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.repositories.ApartmentRepository;
 import com.rentals.apartment.repositories.ApartmentRepositoryCustom;
-import com.rentals.apartment.repositories.ApartmentSpecifications;
+import com.rentals.apartment.repositories.specifications.ApartmentSpecifications;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
