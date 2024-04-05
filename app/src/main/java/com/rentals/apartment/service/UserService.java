@@ -1,20 +1,18 @@
 package com.rentals.apartment.service;
 
+import com.rentals.apartment.domain.Role;
 import com.rentals.apartment.domain.TokenEntity;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.generator.TokenGenerator;
 import com.rentals.apartment.repositories.TokenRepository;
-import com.rentals.apartment.repositories.TokenSpecifications;
+import com.rentals.apartment.repositories.specifications.TokenSpecifications;
 import com.rentals.apartment.repositories.UserRepository;
-import com.rentals.apartment.repositories.UserSpecifications;
+import com.rentals.apartment.repositories.specifications.UserSpecifications;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -47,8 +45,9 @@ public class UserService {
         throw new Exception("The password is not correct");
     }
 
-    public TokenEntity register(String username, String password) {
-        UserEntity user = new UserEntity(username, password);
+    public TokenEntity register(String username, String password, String firstname, String lastname, String email) {
+        Role role = Role.USER;
+        UserEntity user = new UserEntity(username, password, firstname, lastname, email, role);
         userRepository.save(user);
         return createNewToken(user);
     }

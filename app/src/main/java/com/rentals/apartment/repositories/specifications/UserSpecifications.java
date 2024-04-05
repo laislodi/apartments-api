@@ -1,4 +1,4 @@
-package com.rentals.apartment.repositories;
+package com.rentals.apartment.repositories.specifications;
 
 import com.rentals.apartment.domain.UserEntity;
 import org.springframework.data.jpa.domain.Specification;
