@@ -52,18 +52,20 @@ public class UserService {
         return createNewToken(user);
     }
 
-    public int logout(String token) {
+    public void logout(String token) {
         Optional<TokenEntity> optional = tokenRepository.findOne(Specification.where(
                 tokenSpecifications.tokenEqualsTo(token)));
         if (optional.isPresent()) {
             Calendar cal = Calendar.getInstance();
-            TokenEntity tokenEntity = optional.get();
-            tokenEntity.setExpiredAt(cal.getTime());
-            tokenRepository.save(tokenEntity);
-            return 0;
+            Date now = cal.getTime();
+            if (optional.get().getExpiredAt().after(now)){
+                TokenEntity tokenEntity = optional.get();
+                tokenEntity.setExpiredAt(cal.getTime());
+                tokenRepository.save(tokenEntity);
+            }
         } else {
+            // Log something maybe
             System.out.println("logout -> NOT PRESENT");
-            return 1;
         }
     }
 

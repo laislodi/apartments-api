@@ -1,7 +1,6 @@
 package com.rentals.apartment.controller;
 
 import com.rentals.apartment.controller.params.TokenRequestBody;
-import com.rentals.apartment.domain.Role;
 import com.rentals.apartment.domain.TokenEntity;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.service.UserService;
@@ -29,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public int logout(@RequestBody TokenRequestBody token) {
-        return userService.logout(token.getToken());
+    public void logout(@RequestBody TokenRequestBody token) {
+        userService.logout(token.getToken());
     }
 
     @PostMapping("/logout-all")
