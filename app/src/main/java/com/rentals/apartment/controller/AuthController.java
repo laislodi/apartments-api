@@ -29,8 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public int logout(@RequestBody TokenRequestBody token) {
-        return userService.logout(token.getToken());
+    public void logout(@RequestBody TokenRequestBody token) {
+        userService.logout(token.getToken());
     }
 
     @PostMapping("/logout-all")
