@@ -56,12 +56,9 @@ public class UserService {
         Optional<TokenEntity> optional = tokenRepository.findOne(Specification.where(
                 tokenSpecifications.tokenEqualsTo(token)));
         if (optional.isPresent()) {
-//            System.out.println(optional.get().getToken());
             Calendar cal = Calendar.getInstance();
             TokenEntity tokenEntity = optional.get();
-//            System.out.println(tokenEntity.getExpiredAt());
             tokenEntity.setExpiredAt(cal.getTime());
-//            System.out.println(tokenEntity.getExpiredAt());
             tokenRepository.save(tokenEntity);
             return 0;
         } else {
