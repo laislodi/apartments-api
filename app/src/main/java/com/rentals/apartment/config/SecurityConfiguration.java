@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-//import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +20,15 @@ public class SecurityConfiguration {
             .exceptionHandling(customizer -> customizer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
             .csrf(AbstractHttpConfigurer::disable)
             .cors(Customizer.withDefaults())
+//            // How to configure login:
+//            .formLogin(login -> login.defaultSuccessUrl("/home").failureForwardUrl("/login"))
+            .logout(AbstractHttpConfigurer::disable)
+//            // Another way of setting the logout
+//            .logout(logout -> logout.
+//                    .logoutUrl("/logout")
+//                    .permitAll().logoutSuccessHandler((req, resp, authentication) -> {
+//                resp.setStatus(HttpServletResponse.SC_OK);
+//            }))
 //            .authorizeHttpRequests((authorizeHttpRequests) ->
 //                authorizeHttpRequests.requestMatchers(AntPathRequestMatcher.antMatcher("/login")).permitAll())
 //                    .anyRequest().authenticated())
