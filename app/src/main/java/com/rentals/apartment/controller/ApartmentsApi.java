@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping()
-public class ApartmentsApi {
+public class ApartmentsApi implements ControllerConfig {
 
     private final ApartmentService apartmentService;
 

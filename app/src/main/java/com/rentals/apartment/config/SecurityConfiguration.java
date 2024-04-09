@@ -17,6 +17,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+//            // Enable Https
+//            .requiresChannel((requiresChannel) -> requiresChannel.anyRequest().requiresSecure())
             .exceptionHandling(customizer -> customizer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
             .csrf(AbstractHttpConfigurer::disable)
             .cors(Customizer.withDefaults())
