@@ -6,10 +6,9 @@ import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping()
-public class AuthController {
+public class AuthController implements ControllerConfig {
 
     private final UserService userService;
 
