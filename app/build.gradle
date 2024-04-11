@@ -42,8 +42,9 @@ dependencies {
     // Spring Security:
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.2.3'
-    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-resource-server
-//    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.2.3'
+    // https://mvnrepository.com/artifact/com.auth0/java-jwt
+    implementation 'com.auth0:java-jwt:4.4.0'
+
 
     // implementation("org.springframework.boot:spring-boot-starter-web")
      implementation 'org.flywaydb:flyway-core:10.4.1'
