@@ -36,5 +36,4 @@ public class AuthController implements ControllerConfig {
         userService.logoutFromAll(token.getToken());
     }
 
-
 }
