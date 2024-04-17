@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserService {
+public class AuthService {
 
     private final UserRepository userRepository;
     private final UserSpecifications userSpecifications;
@@ -24,7 +24,7 @@ public class UserService {
     private final TokenSpecifications tokenSpecifications;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserSpecifications userSpecifications, TokenRepository tokenRepository, TokenSpecifications tokenSpecifications, BCryptPasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, UserSpecifications userSpecifications, TokenRepository tokenRepository, TokenSpecifications tokenSpecifications, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userSpecifications = userSpecifications;
         this.tokenRepository = tokenRepository;
