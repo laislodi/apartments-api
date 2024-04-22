@@ -4,18 +4,19 @@ import com.rentals.apartment.domain.ApartmentEntity;
 import com.rentals.apartment.domain.ApartmentFilter;
 import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.service.ApartmentService;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping()
-public class ApartmentsApi implements ControllerConfig {
+@RequestMapping("/api")
+public class ApartmentsController implements ControllerConfig {
 
     private final ApartmentService apartmentService;
 
-    public ApartmentsApi(ApartmentService apartmentService) {
+    public ApartmentsController(ApartmentService apartmentService) {
         this.apartmentService = apartmentService;
     }
 
@@ -24,7 +25,11 @@ public class ApartmentsApi implements ControllerConfig {
             ApartmentFilter filter,
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
-        // TODO: adjust ResponseEntity to return the right codes
+        List<ApartmentDTO> list = apartmentService.getAllApartmentsWithSpecifications(order, filter);
+        if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        // TODO: How to return Unauthorized?
         return ResponseEntity.ok(apartmentService.getAllApartmentsWithSpecifications(order, filter));
     }
 
@@ -38,16 +43,28 @@ public class ApartmentsApi implements ControllerConfig {
 
     @GetMapping("/apartments/{id}")
     public ResponseEntity<ApartmentDTO> getApartment(@PathVariable String id) throws Exception {
-        return ResponseEntity.ok(apartmentService.getApartmentById(id));
+        ApartmentDTO apartment;
+        try {
+            apartment = apartmentService.getApartmentById(id);
+        } catch (ObjectNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(apartment);
     }
 
     @PostMapping("/apartments/new")
-    public ResponseEntity<ApartmentDTO> createApartment(@RequestBody ApartmentEntity newApartment) {
+    public ResponseEntity<ApartmentDTO> createApartment(
+            @RequestBody ApartmentEntity newApartment
+    ) {
         return ResponseEntity.ok(apartmentService.createApartment(newApartment));
     }
 
     @PutMapping("/apartments/{id}")
-    public ResponseEntity<ApartmentEntity> editApartment(@PathVariable String id, @RequestBody ApartmentEntity apartment) {
+    public ResponseEntity<ApartmentEntity> editApartment(
+            @PathVariable String id,
+            @RequestBody ApartmentEntity apartment) {
         return ResponseEntity.ok(apartmentService.editApartment(id, apartment));
     }
 }

@@ -1,11 +1,10 @@
 package com.rentals.apartment.controller;
 
 import com.rentals.apartment.controller.params.TokenRequestBody;
-import com.rentals.apartment.domain.TokenEntity;
+import com.rentals.apartment.domain.AuthenticationResponse;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.service.AuthService;
-import com.rentals.apartment.service.TokenServiceExample;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,21 +12,19 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController implements ControllerConfig {
 
     private final AuthService authService;
-    private final TokenServiceExample tokenService;
 
-    AuthController(AuthService authService, TokenServiceExample tokenService) {
+    AuthController(AuthService authService) {
         this.authService = authService;
-        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
-    public TokenEntity login(@RequestBody UserEntity user) throws Exception {
-        return authService.login(user.getUsername(), user.getPassword());
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody UserEntity user) {
+        return ResponseEntity.ok(authService.authenticate(user));
     }
 
     @PostMapping("/register")
-    public TokenEntity register(@RequestBody UserEntity user) {
-        return authService.register(user.getUsername(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail());
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserEntity user) {
+        return ResponseEntity.ok(authService.register(user));
     }
 
     @PostMapping("/logout")
@@ -35,13 +32,13 @@ public class AuthController implements ControllerConfig {
         authService.logout(token.getToken());
     }
 
-    @PostMapping("/logout-all")
-    public void logoutFromAll(@RequestBody TokenRequestBody token) {
-        authService.logoutFromAll(token.getToken());
-    }
+//    @PostMapping("/logout-all")
+//    public void logoutFromAll(@RequestBody TokenRequestBody token) {
+//        authService.logoutFromAll(token.getToken());
+//    }
 
-    @PostMapping("/token")
-    public String token(Authentication authentication) {
-        return tokenService.generateToken(authentication);
-    }
+//    @PostMapping("/token")
+//    public String token(Authentication authentication) {
+//        return tokenService.generateToken(authentication);
+//    }
 }
