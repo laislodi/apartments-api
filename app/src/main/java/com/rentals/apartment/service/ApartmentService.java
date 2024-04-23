@@ -6,6 +6,7 @@ import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.repositories.ApartmentRepository;
 import com.rentals.apartment.repositories.ApartmentRepositoryCustom;
 import com.rentals.apartment.repositories.specifications.ApartmentSpecifications;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -58,7 +59,7 @@ public class ApartmentService {
     public ApartmentDTO getApartmentById(String id) throws Exception {
         Optional<ApartmentEntity> apartment = apartmentRepository.findById(id);
         if (apartment.isEmpty()) {
-            throw new Exception("Apartment not found: id: %s".formatted(id));
+            throw new ObjectNotFoundException(apartment, "Apartment not found: id: %s".formatted(id));
         }
         return apartment.get().toRecord();
     }

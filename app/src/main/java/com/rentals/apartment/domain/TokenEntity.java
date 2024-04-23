@@ -1,8 +1,8 @@
 package com.rentals.apartment.domain;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -29,6 +29,16 @@ public class TokenEntity {
         this.token = token;
         this.createdAt = new Date();
         this.expiredAt = expiredAt;
+        this.user = user;
+    }
+
+    public TokenEntity(String token, UserEntity user) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 1);
+        Date oneHourFromNow = calendar.getTime();
+        this.token = token;
+        this.createdAt = new Date();
+        this.expiredAt = oneHourFromNow;
         this.user = user;
     }
 
