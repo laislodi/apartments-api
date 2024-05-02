@@ -7,9 +7,10 @@ import com.rentals.apartment.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping()
-public class AuthController implements ControllerConfig {
+@RestController()
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
+public class AuthController {
 
     private final AuthService authService;
 

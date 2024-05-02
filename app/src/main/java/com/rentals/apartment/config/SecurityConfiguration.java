@@ -42,9 +42,11 @@ public class SecurityConfiguration {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests -> requests
-                    .requestMatchers("/login/**", "/register/**").permitAll()
+                    .requestMatchers("/api/auth/login/**", "/api/auth/register/**").permitAll()
                     .requestMatchers("/api/apartments/*/edit").authenticated()
+                    .requestMatchers("/api/apartments/add").authenticated()
                     .requestMatchers("/api/apartments/**").permitAll()
+                    .requestMatchers("/api/users/user").authenticated()
                     .anyRequest().authenticated()
             ).userDetailsService(userDetailsService)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

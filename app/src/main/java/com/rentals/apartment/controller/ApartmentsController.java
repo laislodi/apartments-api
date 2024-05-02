@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api")
-public class ApartmentsController implements ControllerConfig {
+@CrossOrigin(origins = "http://localhost:3000")
+public class ApartmentsController {
 
     private final ApartmentService apartmentService;
 
@@ -54,7 +56,7 @@ public class ApartmentsController implements ControllerConfig {
         return ResponseEntity.ok(apartment);
     }
 
-    @PostMapping("/apartments/new")
+    @PostMapping("/apartments/add")
     public ResponseEntity<ApartmentDTO> createApartment(
             @RequestBody ApartmentEntity newApartment
     ) {
