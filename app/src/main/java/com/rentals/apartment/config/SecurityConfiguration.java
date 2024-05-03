@@ -1,5 +1,6 @@
 package com.rentals.apartment.config;
 
+import com.rentals.apartment.domain.Role;
 import com.rentals.apartment.filter.JwtAuthFilter;
 import com.rentals.apartment.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -44,9 +45,9 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(requests -> requests
                     .requestMatchers("/api/auth/login/**", "/api/auth/register/**").permitAll()
                     .requestMatchers("/api/apartments/*/edit").authenticated()
-                    .requestMatchers("/api/apartments/add").authenticated()
+                    .requestMatchers("/api/apartments/add").hasAuthority(Role.ADMIN.name())
+                    .requestMatchers("/api/users/user").permitAll()
                     .requestMatchers("/api/apartments/**").permitAll()
-                    .requestMatchers("/api/users/user").authenticated()
                     .anyRequest().authenticated()
             ).userDetailsService(userDetailsService)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

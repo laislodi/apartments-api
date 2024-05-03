@@ -8,8 +8,8 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api")
@@ -29,7 +29,7 @@ public class ApartmentsController {
     ) {
         List<ApartmentDTO> list = apartmentService.getAllApartmentsWithSpecifications(order, filter);
         if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(list);
         }
         // TODO: How to return Unauthorized?
         return ResponseEntity.ok(apartmentService.getAllApartmentsWithSpecifications(order, filter));

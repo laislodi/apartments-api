@@ -33,13 +33,4 @@ public class AuthController {
         authService.logout(token.getToken());
     }
 
-//    @PostMapping("/logout-all")
-//    public void logoutFromAll(@RequestBody TokenRequestBody token) {
-//        authService.logoutFromAll(token.getToken());
-//    }
-
-//    @PostMapping("/token")
-//    public String token(Authentication authentication) {
-//        return tokenService.generateToken(authentication);
-//    }
 }
