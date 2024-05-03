@@ -8,11 +8,13 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class ApartmentsController implements ControllerConfig {
+@CrossOrigin(origins = "http://localhost:3000")
+public class ApartmentsController {
 
     private final ApartmentService apartmentService;
 
@@ -27,7 +29,7 @@ public class ApartmentsController implements ControllerConfig {
     ) {
         List<ApartmentDTO> list = apartmentService.getAllApartmentsWithSpecifications(order, filter);
         if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(list);
         }
         // TODO: How to return Unauthorized?
         return ResponseEntity.ok(apartmentService.getAllApartmentsWithSpecifications(order, filter));
@@ -54,7 +56,7 @@ public class ApartmentsController implements ControllerConfig {
         return ResponseEntity.ok(apartment);
     }
 
-    @PostMapping("/apartments/new")
+    @PostMapping("/apartments/add")
     public ResponseEntity<ApartmentDTO> createApartment(
             @RequestBody ApartmentEntity newApartment
     ) {

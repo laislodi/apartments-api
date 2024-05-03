@@ -7,9 +7,10 @@ import com.rentals.apartment.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping()
-public class AuthController implements ControllerConfig {
+@RestController()
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
+public class AuthController {
 
     private final AuthService authService;
 
@@ -32,13 +33,4 @@ public class AuthController implements ControllerConfig {
         authService.logout(token.getToken());
     }
 
-//    @PostMapping("/logout-all")
-//    public void logoutFromAll(@RequestBody TokenRequestBody token) {
-//        authService.logoutFromAll(token.getToken());
-//    }
-
-//    @PostMapping("/token")
-//    public String token(Authentication authentication) {
-//        return tokenService.generateToken(authentication);
-//    }
 }

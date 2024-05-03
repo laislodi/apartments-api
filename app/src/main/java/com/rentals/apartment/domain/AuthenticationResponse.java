@@ -1,13 +1,4 @@
 package com.rentals.apartment.domain;
 
-public class AuthenticationResponse {
-    private final String token;
-
-    public AuthenticationResponse(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
+public record AuthenticationResponse(String token, Role role) {
 }
