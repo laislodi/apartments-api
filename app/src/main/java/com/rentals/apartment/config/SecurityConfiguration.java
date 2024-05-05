@@ -44,9 +44,9 @@ public class SecurityConfiguration {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests -> requests
                     .requestMatchers("/api/auth/login/**", "/api/auth/register/**").permitAll()
-                    .requestMatchers("/api/apartments/*/edit").authenticated()
+                    .requestMatchers("/api/apartments/*/edit").hasAuthority(Role.ADMIN.name())
                     .requestMatchers("/api/apartments/add").hasAuthority(Role.ADMIN.name())
-                    .requestMatchers("/api/users/user").permitAll()
+                    .requestMatchers("/api/users/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                     .requestMatchers("/api/apartments/**").permitAll()
                     .anyRequest().authenticated()
             ).userDetailsService(userDetailsService)
