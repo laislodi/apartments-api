@@ -16,7 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.Map;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ApartmentsConfigProperties.class})
 public class ApartmentsApplication implements CommandLineRunner {
     Logger logger
             = LoggerFactory.getLogger(ApartmentsApplication.class);
