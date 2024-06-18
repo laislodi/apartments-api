@@ -6,17 +6,17 @@ import jakarta.persistence.Converter;
 import java.util.Objects;
 
 @Converter
-public class RoleConverter implements AttributeConverter<Role, Long> {
+public class RoleConverter implements AttributeConverter<Role, String> {
     @Override
-    public Long convertToDatabaseColumn(Role role) {
+    public String convertToDatabaseColumn(Role role) {
         if (Objects.isNull(role)) {
             return null;
         }
-        return role.getId();
+        return role.getId().toString();
     }
 
     @Override
-    public Role convertToEntityAttribute(Long id) {
+    public Role convertToEntityAttribute(String id) {
         if (Objects.isNull(id)) {
             return null;
         }

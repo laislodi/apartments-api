@@ -1,44 +1,40 @@
 package com.rentals.apartment.service;
 
 import com.rentals.apartment.domain.AuthenticationResponse;
-import com.rentals.apartment.domain.Role;
 import com.rentals.apartment.domain.TokenEntity;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.repositories.TokenRepository;
 import com.rentals.apartment.repositories.specifications.TokenSpecifications;
 import com.rentals.apartment.repositories.UserRepository;
-import com.rentals.apartment.repositories.specifications.UserSpecifications;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final UserSpecifications userSpecifications;
     private final JwtService jwtService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
 
     private final TokenRepository tokenRepository;
     private final TokenSpecifications tokenSpecifications;
 
     public AuthService(
             UserRepository userRepository,
-            UserSpecifications userSpecifications,
             JwtService jwtService,
             TokenRepository tokenRepository,
             TokenSpecifications tokenSpecifications,
-            BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+            BCryptPasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
-        this.userSpecifications = userSpecifications;
         this.jwtService = jwtService;
         this.tokenRepository = tokenRepository;
         this.tokenSpecifications = tokenSpecifications;
@@ -46,22 +42,22 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    public AuthenticationResponse register(UserEntity request){
+    public AuthenticationResponse register(UserEntity request) {
         UserEntity user = new UserEntity();
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getFirstname()));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole());
-        user = userRepository.save(user);
+        UserEntity savedUser = userRepository.save(user);
 
-        String token = jwtService.generateToken(user);
-        return new AuthenticationResponse(token, user.getRole());
+        String token = jwtService.generateToken(savedUser);
+        return new AuthenticationResponse(token, savedUser.getRole());
     }
 
     public AuthenticationResponse authenticate(UserEntity request) {
-        authenticationManager.authenticate(
+        Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
@@ -71,7 +67,6 @@ public class AuthService {
         String token = jwtService.generateToken(user);
         return new AuthenticationResponse(token, user.getRole());
     }
-
 
 //    private TokenEntity createNewToken(UserEntity user) {
 //        TokenEntity tokenEntity = new TokenEntity(jwtService.generateToken(user), user);
@@ -100,11 +95,10 @@ public class AuthService {
         Optional<TokenEntity> optional = tokenRepository.findOne(Specification.where(
                 tokenSpecifications.tokenEqualsTo(token)));
         if (optional.isPresent()) {
-            Calendar cal = Calendar.getInstance();
-            Date now = cal.getTime();
-            if (optional.get().getExpiredAt().after(now)){
+            LocalDateTime now = LocalDateTime.now();
+            if (Objects.isNull(optional.get().getExpiredAt()) || optional.get().getExpiredAt().isAfter(now)){
                 TokenEntity tokenEntity = optional.get();
-                tokenEntity.setExpiredAt(cal.getTime());
+                tokenEntity.setExpiredAt(now);
                 tokenRepository.save(tokenEntity);
             }
         } else {
