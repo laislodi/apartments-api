@@ -22,7 +22,7 @@ class ApartmentServiceTest {
     private final ApartmentService apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, specifications);
 
     @Test
-//    @Test(expected = NullPointerException.class) // Junit4
+
     void shouldThrowException_whenApartmentNotFound_editApartment() {
         // given - instantiations
         String id = "1234";
