@@ -59,6 +59,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql
     runtimeOnly 'org.flywaydb:flyway-database-postgresql:10.4.1'
 
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.5'
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
