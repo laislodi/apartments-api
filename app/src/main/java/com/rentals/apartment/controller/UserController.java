@@ -2,6 +2,7 @@ package com.rentals.apartment.controller;
 
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
-
 
     private final UserService userService;
 
@@ -25,8 +25,8 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/:id")
-    public UserEntity userById(@RequestParam Long id) throws Exception{
-        return userService.userById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> userById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.userById(id));
     }
 }

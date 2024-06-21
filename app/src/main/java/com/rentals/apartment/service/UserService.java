@@ -20,7 +20,7 @@ public class UserService {
         this.tokenRepository = tokenRepository;
     }
 
-    public UserEntity userByToken(String token) throws Exception {
+    public UserEntity userByToken(String token) throws ObjectNotFoundException {
         TokenEntity tokenEntity = tokenRepository.findByToken(token);
         Optional<UserEntity> user = userRepository.findById(tokenEntity.getUserEntity().getId());
         if (user.isEmpty()) {
@@ -29,7 +29,7 @@ public class UserService {
         return user.get();
     }
 
-    public UserEntity userById(Long id) throws Exception {
+    public UserEntity userById(Long id) throws ObjectNotFoundException {
         Optional<UserEntity> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new ObjectNotFoundException(UserEntity.class, "There is no user with the id: %s".formatted(id));

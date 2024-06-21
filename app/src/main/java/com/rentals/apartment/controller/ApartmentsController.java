@@ -44,7 +44,7 @@ public class ApartmentsController {
     }
 
     @GetMapping("/apartments/{id}")
-    public ResponseEntity<ApartmentDTO> getApartment(@PathVariable String id) throws Exception {
+    public ResponseEntity<ApartmentDTO> getApartment(@PathVariable String id) {
         ApartmentDTO apartment;
         try {
             apartment = apartmentService.getApartmentById(id);

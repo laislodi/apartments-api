@@ -1,17 +1,17 @@
 package com.rentals.apartment.service;
 
+import java.util.*;
+
+import org.hibernate.ObjectNotFoundException;
+import static org.springframework.data.jpa.domain.Specification.where;
+import org.springframework.stereotype.Service;
+
+import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.domain.ApartmentEntity;
 import com.rentals.apartment.domain.ApartmentFilter;
-import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.repositories.ApartmentRepository;
 import com.rentals.apartment.repositories.ApartmentRepositoryCustom;
 import com.rentals.apartment.repositories.specifications.ApartmentSpecifications;
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
-
-import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class ApartmentService {
@@ -36,6 +36,7 @@ public class ApartmentService {
         return allRecords;
     }
 
+    // Change list to Page
     public List<ApartmentDTO> getAllApartmentsWithSpecifications(String orderBy, ApartmentFilter filter) {
         List<ApartmentEntity> allApartments;
         allApartments = apartmentRepository.findAll(
@@ -55,8 +56,7 @@ public class ApartmentService {
         return allRecords;
     }
 
-
-    public ApartmentDTO getApartmentById(String id) throws Exception {
+    public ApartmentDTO getApartmentById(String id) throws ObjectNotFoundException {
         Optional<ApartmentEntity> apartment = apartmentRepository.findById(id);
         if (apartment.isEmpty()) {
             throw new ObjectNotFoundException(apartment, "Apartment not found: id: %s".formatted(id));
@@ -71,25 +71,35 @@ public class ApartmentService {
         return newApartment.toRecord();
     }
 
+    // Try unit testing this
+    // use assert -> verify
     public ApartmentEntity editApartment(String id, ApartmentEntity apartmentEntity) {
-        ApartmentEntity apartment = apartmentRepository.findById(id).get();
-        ApartmentEntity newApartment = new ApartmentEntity();
-        newApartment.setNumberOfBedrooms(apartment.getNumberOfBedrooms());
-        newApartment.setNumberOfBathrooms(apartment.getNumberOfBathrooms());
-        newApartment.setArea(apartment.getArea());
-        newApartment.setHasParking(apartment.getHasParking());
-        newApartment.setPrice(apartment.getPrice());
-        newApartment.setDescription(apartment.getDescription());
+        Optional<ApartmentEntity> optional = apartmentRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new ObjectNotFoundException(id, ApartmentEntity.class);
+        }
+        ApartmentEntity apartment = optional.get();
 
-        newApartment.setId(id);
-        newApartment.setNumberOfBedrooms(apartmentEntity.getNumberOfBedrooms());
-        newApartment.setNumberOfBathrooms(apartmentEntity.getNumberOfBathrooms());
-        newApartment.setArea(apartmentEntity.getArea());
-        newApartment.setHasParking(apartmentEntity.getHasParking());
-        newApartment.setPrice(apartmentEntity.getPrice());
-        newApartment.setDescription(apartmentEntity.getDescription());
+        if (Objects.nonNull(apartmentEntity.getNumberOfBedrooms())) {
+            apartment.setNumberOfBedrooms(apartmentEntity.getNumberOfBedrooms());
+        }
+        if (Objects.nonNull(apartmentEntity.getNumberOfBathrooms())) {
+            apartment.setNumberOfBathrooms(apartmentEntity.getNumberOfBathrooms());
+        }
+        if (Objects.nonNull(apartmentEntity.getPrice())) {
+            apartment.setPrice(apartmentEntity.getPrice());
+        }
+        if (Objects.nonNull(apartmentEntity.getArea())) {
+            apartment.setArea(apartmentEntity.getArea());
+        }
+        if (Objects.nonNull(apartmentEntity.getHasParking())) {
+            apartment.setHasParking(apartmentEntity.getHasParking());
+        }
+        if (Objects.nonNull(apartmentEntity.getDescription())) {
+            apartment.setDescription(apartmentEntity.getDescription());
+        }
 
-       return apartmentRepository.save(newApartment);
+       return apartmentRepository.save(apartment);
     }
 
 }
