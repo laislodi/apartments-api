@@ -16,9 +16,9 @@ public enum Role {
         return id;
     }
 
-    public static Role fromId(Long id) {
+    public static Role fromId(String id) {
         for (Role role: Role.values()){
-            if (role.getId().equals(id)){
+            if (role.getId().toString().equals(id)){
                 return role;
             }
         }

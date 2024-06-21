@@ -2,6 +2,7 @@ package com.rentals.apartment.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -16,29 +17,19 @@ public class TokenEntity {
     private String token;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expired_at")
-    private Date expiredAt;
+    private LocalDateTime expiredAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    public TokenEntity(String token, Date expiredAt, UserEntity user) {
+    public TokenEntity(String token, LocalDateTime createdAt, LocalDateTime expiredAt, UserEntity user) {
         this.token = token;
-        this.createdAt = new Date();
+        this.createdAt = createdAt;
         this.expiredAt = expiredAt;
-        this.user = user;
-    }
-
-    public TokenEntity(String token, UserEntity user) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, 1);
-        Date oneHourFromNow = calendar.getTime();
-        this.token = token;
-        this.createdAt = new Date();
-        this.expiredAt = oneHourFromNow;
         this.user = user;
     }
 
@@ -58,15 +49,15 @@ public class TokenEntity {
         this.token = token;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public Date getExpiredAt() {
+    public LocalDateTime getExpiredAt() {
         return expiredAt;
     }
 
-    public void setExpiredAt(Date expiredAt) {
+    public void setExpiredAt(LocalDateTime expiredAt) {
         this.expiredAt = expiredAt;
     }
 

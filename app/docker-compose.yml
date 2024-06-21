@@ -12,3 +12,10 @@ services:
     environment:
       POSTGRES_PASSWORD: password123
 
+  db_test:
+    image: postgres:16.1
+    ports:
+      - "5433:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password123
