@@ -1,5 +1,7 @@
 package com.rentals.apartment.controller;
 
+import com.rentals.apartment.domain.Role;
+import com.rentals.apartment.domain.UserDTO;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/user")
-    public UserEntity userByToken() {
+    @GetMapping("/user")
+    public UserDTO userByToken() {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserEntity user) {
-            return user;
+            return new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getRole());
+        }
+        return null;
+    }
+
+    @GetMapping("/role")
+    public Role roleByToken() {
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserEntity user) {
+            return user.getRole();
         }
         return null;
     }

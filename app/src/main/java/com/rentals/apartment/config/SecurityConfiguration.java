@@ -38,7 +38,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(requests -> requests
                     .requestMatchers("/api/apartments/*/edit").hasAuthority(Role.ADMIN.name())
                     .requestMatchers("/api/apartments/add").hasAuthority(Role.ADMIN.name())
-                    .requestMatchers("/api/users/user").hasAuthority(Role.USER.name())
+                    .requestMatchers("/api/users/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                     .requestMatchers("/api/auth/login/**", "/api/auth/register/**").permitAll()
                     .requestMatchers("/api/apartments/**").permitAll()
                     .anyRequest().authenticated()
