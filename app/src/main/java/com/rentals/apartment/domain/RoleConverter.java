@@ -2,6 +2,7 @@ package com.rentals.apartment.domain;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.hibernate.metamodel.UnsupportedMappingException;
 
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ public class RoleConverter implements AttributeConverter<Role, String> {
     @Override
     public String convertToDatabaseColumn(Role role) {
         if (Objects.isNull(role)) {
-            return null;
+            return Role.USER.getId().toString();
         }
         return role.getId().toString();
     }
@@ -18,7 +19,7 @@ public class RoleConverter implements AttributeConverter<Role, String> {
     @Override
     public Role convertToEntityAttribute(String id) {
         if (Objects.isNull(id)) {
-            return null;
+            throw new UnsupportedMappingException("Unsupported nulled Id for Role!");
         }
         return Role.fromId(id);
     }

@@ -22,7 +22,6 @@ class ApartmentServiceTest {
     private final ApartmentService apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, specifications);
 
     @Test
-
     void shouldThrowException_whenApartmentNotFound_editApartment() {
         // given - instantiations
         String id = "1234";
