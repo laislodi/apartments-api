@@ -15,4 +15,15 @@ public record ApartmentDTO(
                 {"id": "%s", "numberOfBedrooms": %d, "numberOfBathrooms": %d, "area": %.2f, "hasParking": %b, "price": %.2f, "description": "%s" }
                 """, id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
+
+    public ApartmentEntity toEntity() {
+        return new ApartmentEntity()
+                .setId(id)
+                .setNumberOfBedrooms(numberOfBedrooms)
+                .setNumberOfBathrooms(numberOfBathrooms)
+                .setPrice(price)
+                .setArea(area)
+                .setHasParking(hasParking)
+                .setDescription(description);
+    }
 }

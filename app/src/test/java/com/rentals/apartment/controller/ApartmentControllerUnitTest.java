@@ -33,32 +33,32 @@ public class ApartmentControllerUnitTest {
 
     @BeforeAll
     static void beforeAll() {
-        ApartmentEntity apartment1 = new ApartmentEntity();
-        apartment1.setId("F1rsT-@p4rtm3nt");
-        apartment1.setNumberOfBedrooms(2);
-        apartment1.setNumberOfBathrooms(1);
-        apartment1.setArea(45.3);
-        apartment1.setPrice(1500.0F);
-        apartment1.setHasParking(false);
-        apartment1.setDescription("lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant");
+        ApartmentEntity apartment1 = new ApartmentEntity()
+                .setId("F1rsT-@p4rtm3nt")
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(1)
+                .setArea(45.3)
+                .setPrice(1500.0F)
+                .setHasParking(false)
+                .setDescription("lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant");
 
-        ApartmentEntity apartment2 = new ApartmentEntity();
-        apartment2.setId("S3c0nd-@p4rtm3nt");
-        apartment2.setNumberOfBedrooms(2);
-        apartment2.setNumberOfBathrooms(2);
-        apartment2.setArea(55.3);
-        apartment2.setPrice(2000.0F);
-        apartment2.setHasParking(true);
-        apartment2.setDescription("lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant");
+        ApartmentEntity apartment2 = new ApartmentEntity()
+                .setId("S3c0nd-@p4rtm3nt")
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(2)
+                .setArea(55.3)
+                .setPrice(2000.0F)
+                .setHasParking(true)
+                .setDescription("lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant");
 
-        ApartmentEntity apartment3 = new ApartmentEntity();
-        apartment3.setId("Th1rd-@p4rtm3nt");
-        apartment3.setNumberOfBedrooms(3);
-        apartment3.setNumberOfBathrooms(2);
-        apartment3.setArea(64.3);
-        apartment3.setPrice(2500.0F);
-        apartment3.setHasParking(true);
-        apartment3.setDescription("lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant");
+        ApartmentEntity apartment3 = new ApartmentEntity()
+                .setId("Th1rd-@p4rtm3nt")
+                .setNumberOfBedrooms(3)
+                .setNumberOfBathrooms(2)
+                .setArea(64.3)
+                .setPrice(2500.0F)
+                .setHasParking(true)
+                .setDescription("lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant");
 
         allApartments.add(apartment1);
         allApartments.add(apartment2);
@@ -134,11 +134,19 @@ public class ApartmentControllerUnitTest {
 
     @Test
     void shouldGetTheCorrectApartment() {
-        String id = allApartments.get(0).getId();
-
         // Given
-        ApartmentDTO expectedResult = allApartmentsDTO.get(0);
-        ApartmentEntity expected = allApartments.get(0);
+        String id = "F1rsT-@p4rtm3nt";
+        String description = "lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant";
+        ApartmentEntity expected = new ApartmentEntity()
+                .setId(id)
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(1)
+                .setArea(45.3)
+                .setPrice(1500.0F)
+                .setHasParking(false)
+                .setDescription(description);
+        ApartmentDTO expectedResult = new ApartmentDTO(id, 2, 1, 45.3, false, 1500F, description);
+
         Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.of(expected));
 
         // When
@@ -220,29 +228,30 @@ public class ApartmentControllerUnitTest {
     @Test
     void shouldEditAnApartment() {
         String description = "lorem ipsum dolor sit amet consectetur adipiscing elit montes ad habitant";
-        String id = "F1rsT-@p4rtm3nt";
-        ApartmentEntity apartment = new ApartmentEntity();
-        apartment.setId(id);
-        apartment.setNumberOfBedrooms(2);
-        apartment.setNumberOfBathrooms(1);
-        apartment.setArea(45.3);
-        apartment.setPrice(1800.0F);
-        apartment.setHasParking(false);
-        apartment.setDescription(description);
+        String id = "3dTed-@p4rtm3nt";
+        ApartmentEntity editedApartment = new ApartmentEntity()
+                .setId(id)
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(1)
+                .setArea(45.3)
+                .setPrice(1500.0F)
+                .setHasParking(false)
+                .setDescription(description);
+        ApartmentDTO apartment = new ApartmentDTO(id, 2, 1, 45.3, false, 1500F, description);
 
-        Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.ofNullable(allApartments.get(0)));
-        Mockito.when(apartmentRepository.save(Mockito.any())).thenReturn(apartment);
+        Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.ofNullable(editedApartment));
+        Mockito.when(apartmentRepository.save(Mockito.any())).thenReturn(editedApartment);
 
-        ResponseEntity<ApartmentEntity> response = apartmentsController.editApartment(id, apartment);
+        ResponseEntity<ApartmentDTO> response = apartmentsController.editApartment(id, apartment);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertNotNull(response.getBody());
-        Assertions.assertEquals(apartment.getNumberOfBedrooms(), response.getBody().getNumberOfBedrooms());
-        Assertions.assertEquals(apartment.getNumberOfBathrooms(), response.getBody().getNumberOfBathrooms());
-        Assertions.assertEquals(apartment.getArea(), response.getBody().getArea());
-        Assertions.assertEquals(apartment.getPrice(), response.getBody().getPrice());
-        Assertions.assertEquals(apartment.getHasParking(), response.getBody().getHasParking());
-        Assertions.assertEquals(description, response.getBody().getDescription());
+        Assertions.assertEquals(apartment.numberOfBedrooms(), response.getBody().numberOfBedrooms());
+        Assertions.assertEquals(apartment.numberOfBathrooms(), response.getBody().numberOfBathrooms());
+        Assertions.assertEquals(apartment.area(), response.getBody().area());
+        Assertions.assertEquals(apartment.price(), response.getBody().price());
+        Assertions.assertEquals(apartment.hasParking(), response.getBody().hasParking());
+        Assertions.assertEquals(description, response.getBody().description());
     }
 
     @Test
@@ -261,6 +270,6 @@ public class ApartmentControllerUnitTest {
         Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ObjectNotFoundException.class,
-                () -> apartmentsController.editApartment(id, apartment));
+                () -> apartmentsController.editApartment(id, apartment.toRecord()));
     }
 }

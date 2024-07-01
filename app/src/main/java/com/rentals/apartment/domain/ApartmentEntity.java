@@ -3,6 +3,7 @@ package com.rentals.apartment.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.Objects;
 
@@ -18,9 +19,12 @@ public class ApartmentEntity {
     private Float price;
     private String description;
 
+    public ApartmentEntity() {
+    }
 
-    public void setId(String id) {
+    public ApartmentEntity setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getId() {
@@ -31,48 +35,54 @@ public class ApartmentEntity {
         return numberOfBedrooms;
     }
 
-    public void setNumberOfBedrooms(Integer numberOfBedrooms) {
+    public ApartmentEntity setNumberOfBedrooms(Integer numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
+        return this;
     }
 
     public Integer getNumberOfBathrooms() {
         return numberOfBathrooms;
     }
 
-    public void setNumberOfBathrooms(Integer numberOfBathrooms) {
+    public ApartmentEntity setNumberOfBathrooms(Integer numberOfBathrooms) {
         this.numberOfBathrooms = numberOfBathrooms;
+        return this;
     }
 
     public Double getArea() {
         return area;
     }
 
-    public void setArea(Double area) {
+    public ApartmentEntity setArea(Double area) {
         this.area = area;
+        return this;
     }
 
     public Boolean getHasParking() {
         return hasParking;
     }
 
-    public void setHasParking(Boolean hasParking) {
+    public ApartmentEntity setHasParking(Boolean hasParking) {
         this.hasParking = hasParking;
+        return this;
     }
 
     public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public ApartmentEntity setPrice(Float price) {
         this.price = price;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public ApartmentEntity setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     @Override

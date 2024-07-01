@@ -7,17 +7,17 @@ import org.hibernate.metamodel.UnsupportedMappingException;
 import java.util.Objects;
 
 @Converter
-public class RoleConverter implements AttributeConverter<Role, String> {
+public class RoleConverter implements AttributeConverter<Role, Long> {
     @Override
-    public String convertToDatabaseColumn(Role role) {
+    public Long convertToDatabaseColumn(Role role) {
         if (Objects.isNull(role)) {
             return Role.USER.getId().toString();
         }
-        return role.getId().toString();
+        return role.getId();
     }
 
     @Override
-    public Role convertToEntityAttribute(String id) {
+    public Role convertToEntityAttribute(Long id) {
         if (Objects.isNull(id)) {
             throw new UnsupportedMappingException("Unsupported nulled Id for Role!");
         }
