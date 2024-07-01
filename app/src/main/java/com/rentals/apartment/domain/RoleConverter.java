@@ -11,7 +11,7 @@ public class RoleConverter implements AttributeConverter<Role, Long> {
     @Override
     public Long convertToDatabaseColumn(Role role) {
         if (Objects.isNull(role)) {
-            return Role.USER.getId().toString();
+            return Role.USER.getId();
         }
         return role.getId();
     }

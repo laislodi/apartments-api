@@ -12,32 +12,32 @@ public class RoleConverterUnitTest {
 
     @Test
     void shouldConvertToDatabaseColumnForUser() {
-        String user = roleConverter.convertToDatabaseColumn(Role.USER);
-        Assertions.assertEquals("1", user);
+        Long user = roleConverter.convertToDatabaseColumn(Role.USER);
+        Assertions.assertEquals(1L, user);
     }
 
     @Test
     void shouldConvertToDatabaseColumnForAdmin() {
-        String admin = roleConverter.convertToDatabaseColumn(Role.ADMIN);
-        Assertions.assertEquals("2", admin);
+        Long admin = roleConverter.convertToDatabaseColumn(Role.ADMIN);
+        Assertions.assertEquals(2L, admin);
     }
 
     @Test
     void shouldSetRoleAsDefaultUser_ConvertToDatabaseColumn() {
-        String nullRole = roleConverter.convertToDatabaseColumn(null);
-        Assertions.assertEquals("1", nullRole);
+        Long nullRole = roleConverter.convertToDatabaseColumn(null);
+        Assertions.assertEquals(1L, nullRole);
     }
 
     @Test
     void shouldConvertToEntityAttributeForUser() {
-        Role user = roleConverter.convertToEntityAttribute("1");
+        Role user = roleConverter.convertToEntityAttribute(1L);
 
         Assertions.assertEquals(Role.USER, user);
     }
 
     @Test
     void shouldConvertToEntityAttributeForAdmin() {
-        Role admin = roleConverter.convertToEntityAttribute("2");
+        Role admin = roleConverter.convertToEntityAttribute(2L);
 
         Assertions.assertEquals(Role.ADMIN, admin);
     }
