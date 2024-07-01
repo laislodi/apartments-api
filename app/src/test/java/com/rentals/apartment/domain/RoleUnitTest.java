@@ -7,8 +7,8 @@ public class RoleUnitTest {
 
     @Test
     void shouldReturnTheRightRole_fromIdTest() {
-        Role user = Role.fromId("1");
-        Role admin = Role.fromId("2");
+        Role user = Role.fromId(1L);
+        Role admin = Role.fromId(2L);
 
         Assertions.assertEquals(Role.USER, user);
         Assertions.assertEquals(Role.ADMIN, admin);
@@ -26,13 +26,13 @@ public class RoleUnitTest {
     @Test
     void shouldThrowAnError_fromIdTest() {
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> Role.fromId("qwe"));
+                () -> Role.fromId(3L));
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> Role.fromId(""));
+                () -> Role.fromId(null));
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> Role.fromId("admin"));
+                () -> Role.fromId(0L));
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> Role.fromId("user"));
+                () -> Role.fromId(12345L));
     }
 
     @Test
