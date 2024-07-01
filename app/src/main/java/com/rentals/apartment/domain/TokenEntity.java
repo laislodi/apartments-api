@@ -33,9 +33,7 @@ public class TokenEntity {
         this.user = user;
     }
 
-    public TokenEntity() {
-
-    }
+    public TokenEntity() {}
 
     public Long getId() {
         return id;

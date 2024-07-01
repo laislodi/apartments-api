@@ -73,7 +73,7 @@ public class ApartmentService {
 
     // Try unit testing this
     // use assert -> verify
-    public ApartmentEntity editApartment(String id, ApartmentEntity apartmentEntity) {
+    public ApartmentDTO editApartment(String id, ApartmentEntity apartmentEntity) {
         Optional<ApartmentEntity> optional = apartmentRepository.findById(id);
         if (optional.isEmpty()) {
             throw new ObjectNotFoundException(id, ApartmentEntity.class);
@@ -99,7 +99,7 @@ public class ApartmentService {
             apartment.setDescription(apartmentEntity.getDescription());
         }
 
-       return apartmentRepository.save(apartment);
+       return apartmentRepository.save(apartment).toRecord();
     }
 
 }

@@ -64,9 +64,9 @@ public class ApartmentsController {
     }
 
     @PutMapping("/apartments/{id}")
-    public ResponseEntity<ApartmentEntity> editApartment(
+    public ResponseEntity<ApartmentDTO> editApartment(
             @PathVariable String id,
-            @RequestBody ApartmentEntity apartment) {
-        return ResponseEntity.ok(apartmentService.editApartment(id, apartment));
+            @RequestBody ApartmentDTO apartment) {
+        return ResponseEntity.ok(apartmentService.editApartment(id, apartment.toEntity()));
     }
 }
