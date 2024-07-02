@@ -6,6 +6,7 @@ import com.rentals.apartment.repositories.ApartmentRepositoryCustom;
 import com.rentals.apartment.repositories.specifications.ApartmentSpecifications;
 import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -13,10 +14,15 @@ import java.util.Optional;
 
 class ApartmentServiceUnitTest {
 
-    private final ApartmentRepository apartmentRepository = Mockito.mock(ApartmentRepository.class);
-    private final ApartmentRepositoryCustom apartmentRepositoryCustom = Mockito.mock(ApartmentRepositoryCustom.class);
-    private final ApartmentSpecifications specifications = Mockito.mock(ApartmentSpecifications.class);
-    private final ApartmentService apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, specifications);
+    private static final ApartmentRepository apartmentRepository = Mockito.mock(ApartmentRepository.class);
+    private static final ApartmentRepositoryCustom apartmentRepositoryCustom = Mockito.mock(ApartmentRepositoryCustom.class);
+    private static final ApartmentSpecifications specifications = Mockito.mock(ApartmentSpecifications.class);
+    private static ApartmentService apartmentService;
+
+    @BeforeAll
+    static void beforeAll() {
+        apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, specifications);
+    }
 
     @Test
     void shouldThrowException_whenApartmentNotFound_editApartment() {
