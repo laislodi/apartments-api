@@ -14,15 +14,10 @@ import java.util.Optional;
 
 class ApartmentServiceUnitTest {
 
-    private static final ApartmentRepository apartmentRepository = Mockito.mock(ApartmentRepository.class);
-    private static final ApartmentRepositoryCustom apartmentRepositoryCustom = Mockito.mock(ApartmentRepositoryCustom.class);
-    private static final ApartmentSpecifications specifications = Mockito.mock(ApartmentSpecifications.class);
-    private static ApartmentService apartmentService;
-
-    @BeforeAll
-    static void beforeAll() {
-        apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, specifications);
-    }
+    private final ApartmentRepository apartmentRepository = Mockito.mock(ApartmentRepository.class);
+    private final ApartmentRepositoryCustom apartmentRepositoryCustom = Mockito.mock(ApartmentRepositoryCustom.class);
+    private final ApartmentSpecifications specifications = Mockito.mock(ApartmentSpecifications.class);
+    private final ApartmentService apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, specifications);
 
     @Test
     void shouldThrowException_whenApartmentNotFound_editApartment() {
@@ -42,33 +37,35 @@ class ApartmentServiceUnitTest {
     void shouldCallRepository_whenAllFieldsAreGiven_editApartment() {
         // given - instantiations
         String id = "1234";
-        ApartmentEntity inputEntity = new ApartmentEntity();
-        inputEntity.setNumberOfBedrooms(2);
-        inputEntity.setNumberOfBathrooms(1);
-        inputEntity.setDescription("1234 48372 232398 12829");
-        inputEntity.setArea(75.3);
-        inputEntity.setPrice(1500.0f);
-        inputEntity.setHasParking(false);
+        ApartmentEntity inputEntity = new ApartmentEntity()
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(1)
+                .setDescription("1234 48372 232398 12829")
+                .setArea(75.3)
+                .setPrice(1500.0f)
+                .setHasParking(false);
 
-        ApartmentEntity dbEntity = new ApartmentEntity();
-        dbEntity.setId("1234");
-        dbEntity.setNumberOfBedrooms(3);
-        dbEntity.setNumberOfBathrooms(2);
-        dbEntity.setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd");
-        dbEntity.setArea(80.6);
-        dbEntity.setPrice(2000.0f);
-        dbEntity.setHasParking(true);
+        ApartmentEntity dbEntity = new ApartmentEntity()
+                .setId(id)
+                .setNumberOfBedrooms(3)
+                .setNumberOfBathrooms(2)
+                .setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd")
+                .setArea(80.6)
+                .setPrice(2000.0f)
+                .setHasParking(true);
 
         Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.of(dbEntity));
 
-        ApartmentEntity savedEntity = new ApartmentEntity();
-        savedEntity.setId(id);
-        savedEntity.setNumberOfBedrooms(2);
-        savedEntity.setNumberOfBathrooms(1);
-        savedEntity.setDescription("1234 48372 232398 12829");
-        savedEntity.setArea(75.3);
-        savedEntity.setPrice(1500.0f);
-        savedEntity.setHasParking(false);
+        ApartmentEntity savedEntity = new ApartmentEntity()
+                .setId(id)
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(1)
+                .setDescription("1234 48372 232398 12829")
+                .setArea(75.3)
+                .setPrice(1500.0f)
+                .setHasParking(false);
+
+        Mockito.when(apartmentRepository.save(Mockito.any())).thenReturn(savedEntity);
 
         // when - call
         apartmentService.editApartment(id, inputEntity);
@@ -81,30 +78,32 @@ class ApartmentServiceUnitTest {
     void shouldCallRepository_whenSomeFieldsAreGiven_editApartment() {
         // given - instantiations
         String id = "1234";
-        ApartmentEntity inputEntity = new ApartmentEntity();
-        inputEntity.setNumberOfBedrooms(2);
-        inputEntity.setArea(75.3);
-        inputEntity.setHasParking(false);
+        ApartmentEntity inputEntity = new ApartmentEntity()
+                .setNumberOfBedrooms(2)
+                .setArea(75.3)
+                .setHasParking(false);
 
-        ApartmentEntity dbEntity = new ApartmentEntity();
-        dbEntity.setId("1234");
-        dbEntity.setNumberOfBedrooms(3);
-        dbEntity.setNumberOfBathrooms(2);
-        dbEntity.setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd");
-        dbEntity.setArea(80.6);
-        dbEntity.setPrice(2000.0f);
-        dbEntity.setHasParking(true);
+        ApartmentEntity dbEntity = new ApartmentEntity()
+                .setId("1234")
+                .setNumberOfBedrooms(3)
+                .setNumberOfBathrooms(2)
+                .setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd")
+                .setArea(80.6)
+                .setPrice(2000.0f)
+                .setHasParking(true);
 
         Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.of(dbEntity));
 
-        ApartmentEntity savedEntity = new ApartmentEntity();
-        savedEntity.setId("1234");
-        savedEntity.setNumberOfBedrooms(2);
-        savedEntity.setNumberOfBathrooms(2);
-        savedEntity.setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd");
-        savedEntity.setArea(75.3);
-        savedEntity.setPrice(2000.0f);
-        savedEntity.setHasParking(false);
+        ApartmentEntity savedEntity = new ApartmentEntity()
+                .setId("1234")
+                .setNumberOfBedrooms(2)
+                .setNumberOfBathrooms(2)
+                .setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd")
+                .setArea(75.3)
+                .setPrice(2000.0f)
+                .setHasParking(false);
+
+        Mockito.when(apartmentRepository.save(Mockito.any())).thenReturn(savedEntity);
 
         // when - call
         apartmentService.editApartment(id, inputEntity);
@@ -119,25 +118,27 @@ class ApartmentServiceUnitTest {
         String id = "1234";
         ApartmentEntity inputEntity = new ApartmentEntity();
 
-        ApartmentEntity dbEntity = new ApartmentEntity();
-        dbEntity.setId("1234");
-        dbEntity.setNumberOfBedrooms(3);
-        dbEntity.setNumberOfBathrooms(2);
-        dbEntity.setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd");
-        dbEntity.setArea(80.6);
-        dbEntity.setPrice(2000.0f);
-        dbEntity.setHasParking(true);
+        ApartmentEntity dbEntity = new ApartmentEntity()
+                .setId("1234")
+                .setNumberOfBedrooms(3)
+                .setNumberOfBathrooms(2)
+                .setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd")
+                .setArea(80.6)
+                .setPrice(2000.0f)
+                .setHasParking(true);
 
         Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.of(dbEntity));
 
-        ApartmentEntity savedEntity = new ApartmentEntity();
-        savedEntity.setId("1234");
-        savedEntity.setNumberOfBedrooms(3);
-        savedEntity.setNumberOfBathrooms(2);
-        savedEntity.setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd");
-        savedEntity.setArea(80.6);
-        savedEntity.setPrice(2000.0f);
-        savedEntity.setHasParking(true);
+        ApartmentEntity savedEntity = new ApartmentEntity()
+                .setId("1234")
+                .setNumberOfBedrooms(3)
+                .setNumberOfBathrooms(2)
+                .setDescription("ertrnv nb ehghyghne kdmccn 3 dhdhd")
+                .setArea(80.6)
+                .setPrice(2000.0f)
+                .setHasParking(true);
+
+        Mockito.when(apartmentRepository.save(Mockito.any())).thenReturn(savedEntity);
 
         // when - call
         apartmentService.editApartment(id, inputEntity);
