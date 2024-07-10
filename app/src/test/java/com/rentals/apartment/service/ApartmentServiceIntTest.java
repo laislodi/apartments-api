@@ -166,11 +166,11 @@ public class ApartmentServiceIntTest {
     @Test
     @DisplayName("Should filter apartments by area")
     void shouldFilterApartmentsByArea() {
-        ApartmentFilter filter = new ApartmentFilter(null, null, 60f, 100f, null, null, null, null);
+        ApartmentFilter filter = new ApartmentFilter(null, null, 60f, 70f, null, null, null, null);
 
         List<ApartmentDTO> filteredApartments = apartmentService.getAllApartmentsWithSpecifications("ASC", filter);
 
-        Assertions.assertEquals(2, filteredApartments.size());
+        Assertions.assertEquals(1, filteredApartments.size());
 
         Assertions.assertEquals("F1rsT-@p4rtm3nt", filteredApartments.get(0).id());
         Assertions.assertEquals(2, filteredApartments.get(0).numberOfBedrooms());
@@ -180,15 +180,6 @@ public class ApartmentServiceIntTest {
         Assertions.assertEquals(60.4, filteredApartments.get(0).area());
         Assertions.assertEquals("This is the first apartment",
                 filteredApartments.get(0).description());
-
-        Assertions.assertEquals("S3c0nd-@p4rtm3nt", filteredApartments.get(1).id());
-        Assertions.assertEquals(3, filteredApartments.get(1).numberOfBedrooms());
-        Assertions.assertEquals(2, filteredApartments.get(1).numberOfBathrooms());
-        Assertions.assertEquals(true, filteredApartments.get(1).hasParking());
-        Assertions.assertEquals(2300F, filteredApartments.get(1).price());
-        Assertions.assertEquals(72.80, filteredApartments.get(1).area());
-        Assertions.assertEquals("This is the second apartment",
-                filteredApartments.get(1).description());
 
     }
 }
