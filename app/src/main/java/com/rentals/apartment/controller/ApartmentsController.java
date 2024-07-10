@@ -28,7 +28,6 @@ public class ApartmentsController {
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
         List<ApartmentDTO> list = apartmentService.getAllApartmentsWithSpecifications(order, filter);
-        // TODO: How to return Unauthorized?
         return ResponseEntity.ok(list);
     }
 
