@@ -164,8 +164,8 @@ public class ApartmentServiceIntTest {
     }
 
     @Test
-    @DisplayName("Should filter apartments by number of Bedrooms")
-    void shouldFilterApartmentsByNumberOfBathrooms() {
+    @DisplayName("Should filter apartments by area")
+    void shouldFilterApartmentsByArea() {
         ApartmentFilter filter = new ApartmentFilter(null, null, 60f, 100f, null, null, null, null);
 
         List<ApartmentDTO> filteredApartments = apartmentService.getAllApartmentsWithSpecifications("ASC", filter);
