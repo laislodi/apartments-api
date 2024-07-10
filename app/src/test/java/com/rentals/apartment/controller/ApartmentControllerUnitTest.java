@@ -26,7 +26,7 @@ public class ApartmentControllerUnitTest {
     ApartmentSpecifications apartmentSpecifications = Mockito.mock(ApartmentSpecifications.class);
     ApartmentService apartmentService = new ApartmentService(apartmentRepositoryCustom, apartmentRepository, apartmentSpecifications);
     ApartmentsController apartmentsController = new ApartmentsController(apartmentService);
-    ApartmentFilter apartmentFilter = new ApartmentFilter("1+", "1+", 0f, 999f, 0f, 999f, false, "");
+    ApartmentFilter apartmentFilter = new ApartmentFilter("0+", "0+", 0f, 999f, 0f, 999f, false, "");
 
     static List<ApartmentEntity> allApartments = new ArrayList<>();
     static List<ApartmentDTO> allApartmentsDTO = new ArrayList<>();
@@ -156,6 +156,11 @@ public class ApartmentControllerUnitTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertNotNull(response.getBody());
         Assertions.assertEquals(expectedResult, response.getBody());
+        Assertions.assertEquals(expectedResult.numberOfBedrooms(), response.getBody().numberOfBedrooms());
+        Assertions.assertEquals(expectedResult.numberOfBathrooms(), response.getBody().numberOfBathrooms());
+        Assertions.assertEquals(expectedResult.area(), response.getBody().area());
+        Assertions.assertEquals(expectedResult.price(), response.getBody().price());
+        Assertions.assertEquals(expectedResult.description(), response.getBody().description());
     }
 
     @Test
@@ -270,6 +275,6 @@ public class ApartmentControllerUnitTest {
         Mockito.when(apartmentRepository.findById(id)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ObjectNotFoundException.class,
-                () -> apartmentsController.editApartment(id, apartment.toRecord()));
+                () -> apartmentsController.editApartment(id, apartment.toDTO()));
     }
 }

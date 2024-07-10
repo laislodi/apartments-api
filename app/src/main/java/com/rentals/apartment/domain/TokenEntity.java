@@ -2,6 +2,7 @@ package com.rentals.apartment.domain;
 
 import jakarta.persistence.*;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,10 +27,10 @@ public class TokenEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    public TokenEntity(String token, LocalDateTime createdAt, LocalDateTime expiredAt, UserEntity user) {
+    public TokenEntity(String token, UserEntity user) {
         this.token = token;
-        this.createdAt = createdAt;
-        this.expiredAt = expiredAt;
+        this.createdAt = LocalDateTime.now(Clock.systemUTC());
+        this.expiredAt = createdAt.plusMinutes(10);
         this.user = user;
     }
 

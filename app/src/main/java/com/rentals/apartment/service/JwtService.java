@@ -17,6 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    // This should not be hard-coded
     private final String SECRET_KEY = "dc8762e696307a1fb1f9411df3197ac4a5bf8673f4576dbe9c8a75e51f8a80a0";
 
     public String extractUsername(String token) {
@@ -61,6 +62,8 @@ public class JwtService {
     }
 
     private SecretKey getSignKey() {
+        // We should save the secret key as an environment variable and get it like the following
+        // String secretKey = System.getenv("SECRET_KEY");
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
