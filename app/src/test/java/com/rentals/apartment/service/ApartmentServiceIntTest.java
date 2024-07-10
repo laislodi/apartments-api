@@ -2,6 +2,7 @@ package com.rentals.apartment.service;
 
 import com.rentals.apartment.domain.ApartmentDTO;
 import com.rentals.apartment.domain.ApartmentEntity;
+import com.rentals.apartment.domain.ApartmentFilter;
 import com.rentals.apartment.repositories.ApartmentRepository;
 import com.rentals.apartment.repositories.ApartmentRepositoryCustom;
 import com.rentals.apartment.repositories.specifications.ApartmentSpecifications;
@@ -15,6 +16,8 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.List;
 
 
 @Testcontainers
@@ -138,5 +141,54 @@ public class ApartmentServiceIntTest {
                 .setHasParking(true);
         Assertions.assertThrows(ObjectNotFoundException.class,
                 () -> apartmentService.editApartment("1nv@lid-Id", apartment));
+    }
+
+    @Test
+    @DisplayName("Should filter apartments by number of Bedrooms")
+    void shouldFilterApartmentsByNumberOfBedrooms() {
+        ApartmentFilter filter = new ApartmentFilter("2", null, null, null, null, null, null, null);
+
+        List<ApartmentDTO> filteredApartments = apartmentService.getAllApartmentsWithSpecifications("ASC", filter);
+
+        Assertions.assertEquals(1, filteredApartments.size());
+
+        Assertions.assertEquals("F1rsT-@p4rtm3nt", filteredApartments.get(0).id());
+        Assertions.assertEquals(2, filteredApartments.get(0).numberOfBedrooms());
+        Assertions.assertEquals(1, filteredApartments.get(0).numberOfBathrooms());
+        Assertions.assertEquals(false, filteredApartments.get(0).hasParking());
+        Assertions.assertEquals(1580F, filteredApartments.get(0).price());
+        Assertions.assertEquals(60.4, filteredApartments.get(0).area());
+        Assertions.assertEquals("This is the first apartment",
+                filteredApartments.get(0).description());
+
+    }
+
+    @Test
+    @DisplayName("Should filter apartments by number of Bedrooms")
+    void shouldFilterApartmentsByNumberOfBathrooms() {
+        ApartmentFilter filter = new ApartmentFilter(null, null, 60f, 100f, null, null, null, null);
+
+        List<ApartmentDTO> filteredApartments = apartmentService.getAllApartmentsWithSpecifications("ASC", filter);
+
+        Assertions.assertEquals(2, filteredApartments.size());
+
+        Assertions.assertEquals("F1rsT-@p4rtm3nt", filteredApartments.get(0).id());
+        Assertions.assertEquals(2, filteredApartments.get(0).numberOfBedrooms());
+        Assertions.assertEquals(1, filteredApartments.get(0).numberOfBathrooms());
+        Assertions.assertEquals(false, filteredApartments.get(0).hasParking());
+        Assertions.assertEquals(1580F, filteredApartments.get(0).price());
+        Assertions.assertEquals(60.4, filteredApartments.get(0).area());
+        Assertions.assertEquals("This is the first apartment",
+                filteredApartments.get(0).description());
+
+        Assertions.assertEquals("S3c0nd-@p4rtm3nt", filteredApartments.get(1).id());
+        Assertions.assertEquals(3, filteredApartments.get(1).numberOfBedrooms());
+        Assertions.assertEquals(2, filteredApartments.get(1).numberOfBathrooms());
+        Assertions.assertEquals(true, filteredApartments.get(1).hasParking());
+        Assertions.assertEquals(2300F, filteredApartments.get(1).price());
+        Assertions.assertEquals(72.80, filteredApartments.get(1).area());
+        Assertions.assertEquals("This is the second apartment",
+                filteredApartments.get(1).description());
+
     }
 }

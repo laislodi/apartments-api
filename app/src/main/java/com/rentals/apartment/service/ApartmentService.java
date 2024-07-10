@@ -56,23 +56,15 @@ public class ApartmentService {
             if (Objects.nonNull(filter.bathrooms())) {
                 specification = specification.and(specifications.bathroomsEqualOrGreaterThan(filter.bathrooms()));
             }
-            if (Objects.nonNull(filter.maxArea())) {
-                if (Objects.nonNull(filter.minArea())) {
-                    specification = specification.and(specifications.areaBetween(filter.minArea(), filter.maxArea()));
-                } else {
-                    specification = specification.and(specifications.areaBetween(0F, filter.maxArea()));
-                }
-            } else if (Objects.nonNull(filter.minArea())) {
-                specification = specification.and(specifications.areaBetween(filter.minArea(), Float.MAX_VALUE));
+            if (Objects.nonNull(filter.maxArea()) || Objects.nonNull(filter.minArea())) {
+                Float maxArea = Objects.nonNull(filter.maxArea()) ? filter.maxArea() : Float.MAX_VALUE;
+                Float minArea = Objects.nonNull(filter.minArea()) ? filter.minArea() : 0f;
+                specification = specification.and(specifications.areaBetween(minArea, maxArea));
             }
-            if (Objects.nonNull(filter.maxPrice())) {
-                if (Objects.nonNull(filter.minPrice())) {
-                    specification = specification.and(specifications.priceBetween(filter.minPrice(), filter.maxPrice()));
-                } else {
-                    specification = specification.and(specifications.priceBetween(0F, filter.maxPrice()));
-                }
-            } else if (Objects.nonNull(filter.minPrice())) {
-                specification = specification.and(specifications.priceBetween(filter.minPrice(), Float.MAX_VALUE));
+            if (Objects.nonNull(filter.maxPrice()) || Objects.nonNull(filter.minPrice())) {
+                Float maxPrice = Objects.nonNull(filter.maxPrice()) ? filter.maxPrice() : Float.MAX_VALUE;
+                Float minPrice = Objects.nonNull(filter.minPrice()) ? filter.minPrice() : 0f;
+                specification = specification.and(specifications.priceBetween(minPrice, maxPrice));
             }
             if (Objects.nonNull(filter.hasParking())) {
                 specification = specification.and(specifications.hasParking(filter.hasParking()));
