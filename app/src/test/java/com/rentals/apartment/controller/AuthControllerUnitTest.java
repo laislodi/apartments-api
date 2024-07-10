@@ -91,7 +91,7 @@ class AuthControllerUnitTest {
     }
 
     @Test
-    void register() {
+    void shouldRegisterSuccessfully() {
         // Given
         UserEntity user = new UserEntity("username", "password", "firstname", "lastname", "email", Role.USER);
         UserEntity userEncrypted = new UserEntity(user.getUsername(), "#password", user.getFirstname(), user.getLastname(), user.getEmail(), user.getRole());
@@ -119,10 +119,9 @@ class AuthControllerUnitTest {
         given(clock.getZone()).willReturn(ZoneId.of("UCT"));
         UserEntity user = new UserEntity("bob_singer", "Encrypted_Password", "Bob", "Singer", "bob_singer@mail.com", Role.USER);
         String token = "SomE_R@nd0m_T0ken";
-        LocalDateTime createdAt = LocalDateTime.of(2024, 4, 3, 12, 2, 3);
-        TokenEntity tokenEntity = new TokenEntity(token, createdAt, null, user);
+        TokenEntity tokenEntity = new TokenEntity(token, user);
+        tokenEntity.setExpiredAt(null);
 
-        //
         Mockito.when(tokenRepository.findOne(Specification.where(
                 tokenSpecifications.tokenEqualsTo("SomE_R@nd0m_T0ken")))).thenReturn(Optional.of(tokenEntity));
 
@@ -141,11 +140,9 @@ class AuthControllerUnitTest {
         given(clock.getZone()).willReturn(ZoneId.of("UCT"));
         UserEntity user = new UserEntity("bob_singer", "Encrypted_Password", "Bob", "Singer", "bob_singer@mail.com", Role.USER);
         String token = "SomE_R@nd0m_T0ken";
-        LocalDateTime createdAt = LocalDateTime.of(2024, 4, 3, 12, 2, 3);
-        LocalDateTime expiredAt = LocalDateTime.of(3024, 4, 3, 13, 2, 3);
-        TokenEntity tokenEntity = new TokenEntity(token, createdAt, expiredAt, user);
+        TokenEntity tokenEntity = new TokenEntity(token, user);
+        tokenEntity.setExpiredAt(LocalDateTime.of(3024, 4, 3, 13, 2, 3));
 
-        //
         Mockito.when(tokenRepository.findOne(Specification.where(
                 tokenSpecifications.tokenEqualsTo("SomE_R@nd0m_T0ken")))).thenReturn(Optional.of(tokenEntity));
 

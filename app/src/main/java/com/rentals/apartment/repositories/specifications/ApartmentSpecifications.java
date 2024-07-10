@@ -11,7 +11,8 @@ import java.util.Objects;
 public class ApartmentSpecifications {
 
     public Specification<ApartmentEntity> descriptionContains(String description) {
-        return (apartment, cq, cb) -> cb.like(apartment.get("description"), "%" + description + "%");
+        String finalDescription = description.toLowerCase();
+        return (apartment, cq, cb) -> cb.like(cb.lower(apartment.get("description")), "%" + finalDescription + "%");
     }
 
     private Specification<ApartmentEntity> greaterThanOrEqualTo(String value, String field) {
@@ -34,17 +35,9 @@ public class ApartmentSpecifications {
     }
 
     public Specification<ApartmentEntity> between(Float min, Float max, String field) {
-        if (Objects.isNull(min)) {
-            min = 0f;
-        }
-        if (Objects.isNull(max)) {
-            max = Float.MAX_VALUE;
-        }
-        Float finalMin = min;
-        Float finalMax = max;
         return (apartment, cq, cb) -> cb.and(
-                cb.greaterThanOrEqualTo(apartment.get(field), finalMin),
-                cb.lessThanOrEqualTo(apartment.get(field), finalMax)
+                cb.greaterThanOrEqualTo(apartment.get(field), min),
+                cb.lessThanOrEqualTo(apartment.get(field), max)
         );
     }
 
@@ -57,10 +50,6 @@ public class ApartmentSpecifications {
     }
 
     public Specification<ApartmentEntity> hasParking(Boolean hasParking) {
-        Specification<ApartmentEntity> sp = (apartment, cq, cb) -> {
-            Predicate predicate = hasParking ? cb.isTrue(apartment.get("hasParking")) : null;
-            return predicate;
-        };
-        return sp;
+        return (apartment, cq, cb) -> hasParking ? cb.isTrue(apartment.get("hasParking")) : null;
     }
 }

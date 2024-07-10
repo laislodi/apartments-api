@@ -1,6 +1,7 @@
 package com.rentals.apartment.service;
 
 import com.rentals.apartment.domain.AuthenticationResponse;
+import com.rentals.apartment.domain.Role;
 import com.rentals.apartment.domain.TokenEntity;
 import com.rentals.apartment.domain.UserEntity;
 import com.rentals.apartment.repositories.TokenRepository;
@@ -42,16 +43,26 @@ public class AuthService {
     }
 
     public AuthenticationResponse register(UserEntity request) {
+        if (Objects.isNull(request.getPassword()) ||
+                Objects.isNull(request.getUsername()) ||
+                Objects.isNull(request.getEmail())) {
+            throw new IllegalArgumentException("Password, Username and email should not be empty.");
+        }
+        Optional<UserEntity> optional = userRepository.findByUsername(request.getUsername());
+        if (optional.isPresent()) {
+            throw new RuntimeException("This username is not available.");
+        }
         UserEntity user = new UserEntity();
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+        user.setRole(Objects.nonNull(request.getRole()) ? request.getRole() : Role.USER);
         UserEntity savedUser = userRepository.save(user);
 
         String token = jwtService.generateToken(savedUser);
+        tokenRepository.save(new TokenEntity(token, user));
         return new AuthenticationResponse(token, savedUser.getRole());
     }
 
@@ -63,8 +74,10 @@ public class AuthService {
                 )
         );
         UserEntity user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(user);
-        return new AuthenticationResponse(token, user.getRole());
+        String tokenValue = jwtService.generateToken(user);
+        tokenRepository.save(new TokenEntity(tokenValue, user));
+
+        return new AuthenticationResponse(tokenValue, user.getRole());
     }
 
     public void logout(String token) {

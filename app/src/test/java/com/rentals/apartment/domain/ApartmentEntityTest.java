@@ -17,7 +17,7 @@ class ApartmentEntityTest {
         entity.setHasParking(false);
         entity.setPrice(1000f);
         entity.setDescription("qwert asdfg zxcvb");
-        ApartmentDTO entityRecord = entity.toRecord();
+        ApartmentDTO entityRecord = entity.toDTO();
 
         assertEquals(expectedDto, entityRecord);
     }

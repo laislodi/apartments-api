@@ -28,11 +28,8 @@ public class ApartmentsController {
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
         List<ApartmentDTO> list = apartmentService.getAllApartmentsWithSpecifications(order, filter);
-        if (list.isEmpty()) {
-            return ResponseEntity.ok(list);
-        }
         // TODO: How to return Unauthorized?
-        return ResponseEntity.ok(apartmentService.getAllApartmentsWithSpecifications(order, filter));
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/apartments-old")
@@ -69,4 +66,11 @@ public class ApartmentsController {
             @RequestBody ApartmentDTO apartment) {
         return ResponseEntity.ok(apartmentService.editApartment(id, apartment.toEntity()));
     }
+
+    @DeleteMapping("/apartment/{id}")
+    public ResponseEntity<String> deleteApartment(@PathVariable String id) {
+        apartmentService.deleteApartment(id);
+        return ResponseEntity.ok(id);
+    }
+
 }

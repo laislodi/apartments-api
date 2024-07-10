@@ -3,7 +3,6 @@ package com.rentals.apartment.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.springframework.http.HttpStatusCode;
 
 import java.util.Objects;
 
@@ -98,7 +97,7 @@ public class ApartmentEntity {
         return Objects.hash(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 
-    public ApartmentDTO toRecord() {
+    public ApartmentDTO toDTO() {
         return new ApartmentDTO(id, numberOfBedrooms, numberOfBathrooms, area, hasParking, price, description);
     }
 }
