@@ -112,8 +112,11 @@ public class ApartmentService {
     }
 
     private static void assertPositiveValues(ApartmentEntity apartment) {
-        if (apartment.getNumberOfBedrooms() < 0 || apartment.getNumberOfBathrooms() < 0) {
-            throw new RuntimeException("The number of bedrooms and bathrooms cannot not be negative.");
+        if (apartment.getNumberOfBedrooms() < 0) {
+            throw new RuntimeException("The number of bedrooms cannot not be negative.");
+        }
+        if (apartment.getNumberOfBathrooms() < 0) {
+            throw new RuntimeException("The number of bathrooms cannot not be negative.");
         }
         if (apartment.getArea() <= 0) {
             throw new RuntimeException("The apartment area cannot not be negative.");
@@ -126,7 +129,6 @@ public class ApartmentService {
     // Try unit testing this
     // use assert -> verify
     public ApartmentDTO editApartment(String id, ApartmentEntity apartmentEntity) {
-        assertPositiveValues(apartmentEntity);
         Optional<ApartmentEntity> optional = apartmentRepository.findById(id);
         if (optional.isEmpty()) {
             throw new ObjectNotFoundException(id, ApartmentEntity.class);
@@ -134,15 +136,27 @@ public class ApartmentService {
         ApartmentEntity apartment = optional.get();
 
         if (Objects.nonNull(apartmentEntity.getNumberOfBedrooms())) {
+            if (apartment.getNumberOfBedrooms() < 0) {
+                throw new RuntimeException("The number of bedrooms cannot not be negative.");
+            }
             apartment.setNumberOfBedrooms(apartmentEntity.getNumberOfBedrooms());
         }
         if (Objects.nonNull(apartmentEntity.getNumberOfBathrooms())) {
+            if (apartment.getNumberOfBathrooms() < 0) {
+                throw new RuntimeException("The number of bathrooms cannot not be negative.");
+            }
             apartment.setNumberOfBathrooms(apartmentEntity.getNumberOfBathrooms());
         }
         if (Objects.nonNull(apartmentEntity.getPrice())) {
+            if (apartment.getPrice() < 0) {
+                throw new RuntimeException("The price cannot not be negative.");
+            }
             apartment.setPrice(apartmentEntity.getPrice());
         }
         if (Objects.nonNull(apartmentEntity.getArea())) {
+            if (apartment.getArea() < 0) {
+                throw new RuntimeException("The area cannot not be negative.");
+            }
             apartment.setArea(apartmentEntity.getArea());
         }
         if (Objects.nonNull(apartmentEntity.getHasParking())) {
