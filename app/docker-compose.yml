@@ -10,7 +10,8 @@ services:
 #      - 5432
     restart: always
     environment:
-      POSTGRES_PASSWORD: password123
+      # Add a .env file with this variable set
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   db_test:
     image: postgres:16.1
@@ -18,4 +19,5 @@ services:
       - "5433:5432"
     restart: always
     environment:
-      POSTGRES_PASSWORD: password123
+      # Add a .env file with this variable set
+      POSTGRES_PASSWORD: ${POSTGRES_TEST_PASSWORD}
