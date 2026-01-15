@@ -35,7 +35,20 @@ jobs:
 
     - name: Setup Docker Container
       working-directory: ./app
-      run: docker-compose up -d
+      env:
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_TEST_PASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
+      run: docker compose up -d
+
+    - name: Create secrets.properties
+      run: |
+        cat <<EOF > app/src/main/resources/secrets.properties
+        spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}
+        spring.datasource.username=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+        spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+        spring.datasource.driver-class-name=org.postgresql.Driver
+        spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+        EOF
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build

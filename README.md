@@ -40,7 +40,7 @@ This project comes with a Docker compose file that allows you to create a contai
 After you clone this repository, you must:
 
 1. Open the terminal and change directory to app by typing `cd app`
-2. Type `docker-compose up` to start (or restart) your database containers. This will start both Postgres development and test containers. Ps. Run `docker-compose up -d` to run in detached mode.
+2. Type `docker compose up` to start (or restart) your database containers. This will start both Postgres development and test containers. Ps. Run `docker-compose up -d` to run in detached mode.
 3. With your containers running, run your Java application. If using IntelliJ or Eclipse, you can just hit the play button. _Remember to add Java related environment variables, set you SDK, and anything else._
 4. You are all set.
 
