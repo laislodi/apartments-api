@@ -128,25 +128,25 @@ public class ApartmentService {
         ApartmentEntity apartment = optional.get();
 
         if (Objects.nonNull(apartmentEntity.getNumberOfBedrooms())) {
-            if (apartment.getNumberOfBedrooms() < 0) {
+            if (apartmentEntity.getNumberOfBedrooms() < 0) {
                 throw new RuntimeException("The number of bedrooms cannot not be negative.");
             }
             apartment.setNumberOfBedrooms(apartmentEntity.getNumberOfBedrooms());
         }
         if (Objects.nonNull(apartmentEntity.getNumberOfBathrooms())) {
-            if (apartment.getNumberOfBathrooms() < 0) {
+            if (apartmentEntity.getNumberOfBathrooms() < 0) {
                 throw new RuntimeException("The number of bathrooms cannot not be negative.");
             }
             apartment.setNumberOfBathrooms(apartmentEntity.getNumberOfBathrooms());
         }
         if (Objects.nonNull(apartmentEntity.getPrice())) {
-            if (apartment.getPrice() < 0) {
+            if (apartmentEntity.getPrice() < 0) {
                 throw new RuntimeException("The price cannot not be negative.");
             }
             apartment.setPrice(apartmentEntity.getPrice());
         }
         if (Objects.nonNull(apartmentEntity.getArea())) {
-            if (apartment.getArea() < 0) {
+            if (apartmentEntity.getArea() < 0) {
                 throw new RuntimeException("The area cannot not be negative.");
             }
             apartment.setArea(apartmentEntity.getArea());

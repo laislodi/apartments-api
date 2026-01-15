@@ -35,7 +35,7 @@ jobs:
 
     - name: Setup Docker Container
       working-directory: ./app
-      run: docker-compose up -d
+      run: docker compose up -d
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
