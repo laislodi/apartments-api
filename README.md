@@ -1,5 +1,36 @@
 # Apartments Spring Boot Project
 
+## Technology Stack
+
+- **Java 17** with **Spring Boot 3.2.1**
+- **PostgreSQL 16.1** database with **Flyway** migrations
+- **JWT-based authentication** using Spring Security
+- **Gradle 8.5** build system
+- **Spring Data JPA** with Hibernate ORM
+- **TestContainers** for integration testing
+- **JUnit 5** for unit testing
+
+## Core Features
+
+### Apartment Management
+- CRUD operations for apartment listings
+- Advanced filtering by bedrooms, bathrooms, area, price, parking, and description
+- Two filter implementations: JPA Specifications and custom Criteria API
+- Input validation for apartment data
+
+### Authentication & Authorization
+- User registration and login with JWT tokens (24-hour validity)
+- Role-based access control (USER and ADMIN roles)
+- Token storage in database for logout capability
+- Admin-only endpoints for creating/editing apartments
+- BCrypt password encryption
+
+### API Features
+- RESTful design
+- CORS enabled for frontend (localhost:3000)
+- Stateless session management
+- Comprehensive endpoint logging
+
 ## Database setup
 
 This project comes with a Docker compose file that allows you to create a container with a Postgres database. All the database migration files in the resources folder allows you to have everything you need to have a functional and upgraded database ready to run your application.
@@ -21,14 +52,14 @@ This application is configured to show every end point available in the logs. He
 
 #### Post: /api/auth/login
 
-- **Description:** Authorize the User in the app 
+- **Description:** Authorize the User in the app
 - **Return:** Authentication Response, with a Token and a Role
 - **Exception:** NoSuchElementException
 - **Parameters:** User
 
 #### Post: /api/auth/register
 
-- **Description:** Register a new User in the application 
+- **Description:** Register a new User in the application
 - **Return:** Authentication Response, with a Token and a Role
 - **Exception:** IllegalArgumentException, RuntimeException
 - **Parameters:** User
@@ -116,3 +147,82 @@ Source: https://www.youtube.com/watch?v=RnZmeczS_DI
 - Authentication Controller must implement `login` and `register` functions -> these will not be authenticated
 - Authentication Controller must implement non authentication functions
 
+## Key Endpoints
+
+| Endpoint | Method | Access | Description |
+|----------|--------|--------|-------------|
+| `/api/apartments` | GET | Public | List apartments with filters |
+| `/api/apartments/{id}` | GET | Public | Get single apartment |
+| `/api/apartments/add` | POST | ADMIN | Create apartment |
+| `/api/apartments/{id}` | PUT | ADMIN | Edit apartment |
+| `/api/apartment/{id}` | DELETE | Authenticated | Delete apartment |
+| `/api/auth/login` | POST | Public | User login |
+| `/api/auth/register` | POST | Public | User registration |
+| `/api/auth/logout` | POST | Authenticated | User logout |
+| `/api/users/user` | GET | Authenticated | Get current user |
+| `/api/users/role` | GET | Authenticated | Get current user's role |
+| `/api/users/{id}` | GET | Authenticated | Get user by ID |
+
+## Project Structure
+
+```
+app/src/main/java/com/rentals/apartment/
+├── ApartmentsApplication.java   # Main entry point
+├── controller/                  # REST endpoints
+│   ├── ApartmentsController.java
+│   ├── AuthController.java
+│   └── UserController.java
+├── service/                     # Business logic
+│   ├── ApartmentService.java
+│   ├── AuthService.java
+│   └── JwtService.java
+├── domain/                      # Entities and DTOs
+│   ├── ApartmentEntity.java
+│   ├── ApartmentDTO.java
+│   ├── ApartmentFilter.java
+│   ├── UserEntity.java
+│   ├── UserDTO.java
+│   ├── TokenEntity.java
+│   └── Role.java
+├── repositories/                # Data access layer
+│   ├── ApartmentRepository.java
+│   ├── UserRepository.java
+│   └── TokenRepository.java
+├── filter/                      # JWT authentication filter
+│   └── JwtAuthFilter.java
+└── config/                      # Security configuration
+    └── SecurityConfiguration.java
+```
+
+## Database Schema
+
+### apartments
+| Column | Type | Description |
+|--------|------|-------------|
+| id | TEXT (PK) | UUID identifier |
+| number_of_bedrooms | INTEGER | Number of bedrooms |
+| number_of_bathrooms | INTEGER | Number of bathrooms |
+| area | NUMERIC | Area in square units |
+| has_parking | BOOLEAN | Parking availability |
+| price | NUMERIC | Rental price |
+| description | TEXT | Apartment description |
+
+### users
+| Column | Type | Description |
+|--------|------|-------------|
+| id | INTEGER (PK) | Auto-generated ID |
+| username | TEXT (UNIQUE) | User's username |
+| password | TEXT | BCrypt encrypted password |
+| first_name | TEXT | User's first name |
+| last_name | TEXT | User's last name |
+| email | TEXT | User's email |
+| role | INTEGER | 1=USER, 2=ADMIN |
+
+### tokens
+| Column | Type | Description |
+|--------|------|-------------|
+| id | INTEGER (PK) | Auto-generated ID |
+| token | TEXT | JWT token string |
+| user_id | INTEGER (FK) | Reference to users table |
+| created_at | TIMESTAMP | Token creation time |
+| expired_at | TIMESTAMP | Token expiration time |

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -38,7 +39,8 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(requests -> requests
                     .requestMatchers("/api/apartments/*/edit").hasAuthority(Role.ADMIN.name())
                     .requestMatchers("/api/apartments/add").hasAuthority(Role.ADMIN.name())
-                    .requestMatchers("/api/users/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                    .requestMatchers(HttpMethod.GET, "/api/users/user", "/api/users/role").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                    .requestMatchers("/api/users/**").hasAuthority(Role.ADMIN.name())
                     .requestMatchers("/api/auth/login/**", "/api/auth/register/**").permitAll()
                     .requestMatchers("/api/apartments/**").permitAll()
                     .anyRequest().authenticated()
